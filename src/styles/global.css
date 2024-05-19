@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 2em; /* Dimensioni del titolo */
+    color: rgba(255, 255, 255, 0.75); /* Colore del testo del titolo */
+  }
+  
+  .line-1, .title {
+    position: relative;
+    font-size: 180%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  /* Animazione */
+  .anim-typewriter {
+    width: max-content;
+    animation: typewriter 4s steps(44) 1s 1 normal both, blinkTextCursor 500ms steps(44) infinite normal;
+  }
+  
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  @keyframes blinkTextCursor {
+    from {
+      border-right-color: black;
+    }
+    to {
+      border-right-color: transparent;
+    }
+  }
+  
+  /* Rimuove il bordo destro dopo l'animazione */
+  .anim-typewriter::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px; /* Imposta un offset negativo per allineare il cursore con l'ultima lettera */
+    width: 2px; /* Larghezza del cursore di scrittura */
+    height: 100%;
+    background-color: transparent; /* Colore del cursore */
+    animation: blinkTextCursorAfter 500ms steps(44) infinite normal;
+  }
+  
+  @keyframes blinkTextCursorAfter {
+    from {
+      background-color: black;
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+  

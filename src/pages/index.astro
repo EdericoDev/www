@@ -1,13 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
- 
+import '../styles/global.css';
+
 const allPosts = await getCollection('blog');
- 
 ---
- 
-<Layout title="Welcome to Astro.">
-  <main>
-    {allPosts.map((post) => <a href={'/blog/' +post.slug}>{post.data.title}</a>)}
+
+<Layout>
+  <div class="prose mx-auto p-4">
+    <h1 class="line-1 anim-typewriter">Welcome to my Website</h1>
+  </div>
+  <main class="prose mx-auto mt-8">
+    <h2>Blog Posts</h2>
+    <ul>
+      {allPosts.map((post) => (
+        <li><a href={`/blog/${post.slug}`} class="text-blue-500 hover:underline">{post.data.title}</a></li>
+      ))}
+    </ul>
   </main>
 </Layout>

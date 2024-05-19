@@ -3,13 +3,15 @@ import typography from '@tailwindcss/typography';
 
 export default {
   content: [
-    './src/**/*.{astro,html,js,jsx,ts,tsx,mdx}', 
+    './src/**/*.{html,js,jsx,ts,tsx}', // Include all relevant paths
+    './src/pages/index.astro', // Include the root HTML file
   ],
   theme: {
-    // ...
+    extend: {
+      // Your custom theme configurations
+    },
   },
   plugins: [
     typography,
-    // ...
   ],
 }
