@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
+import { Image } from 'astro:assets';
+import phantom from '../icons/phantom.png';
 
 const allPosts = await getCollection('blog');
 ---
@@ -18,7 +20,7 @@ const allPosts = await getCollection('blog');
       <span class="badge-text">Email me</span>
     </a>
     <a href="https://open.spotify.com/playlist/7ujDwPWAJ3C3iyG4Zdq01s?si=5d335a313d1b4454" class="badge">
-      <img src="/src/icons/phantom.png" alt="Icon" class="badge-icon">
+      <Image src={phantom} alt="Icon" class="badge-icon">
       <span class="badge-text">Copy my mood</span>
     </a>
     <hr>
