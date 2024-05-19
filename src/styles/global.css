@@ -2,74 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    height: 100%;
-    margin: 0;
+.typewriter {
+  width: 23ch;
+  animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid;
+  font-size: 2em;
+}
+
+@keyframes typing {
+  from {
+    width: 0
   }
-  
-  .wrapper {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+}
+    
+@keyframes blink {
+  50% {
+    border-color: transparent
   }
-  
-  .title {
-    font-size: 2em; /* Dimensioni del titolo */
-    color: rgba(255, 255, 255, 0.75); /* Colore del testo del titolo */
-  }
-  
-  .line-1, .title {
-    position: relative;
-    font-size: 180%;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  
-  /* Animazione */
-  .anim-typewriter {
-    width: max-content;
-    animation: typewriter 4s steps(44) 1s 1 normal both, blinkTextCursor 500ms steps(44) infinite normal;
-  }
-  
-  @keyframes typewriter {
-    from {
-      width: 0;
-    }
-    to {
-      width: 100%;
-    }
-  }
-  
-  @keyframes blinkTextCursor {
-    from {
-      border-right-color: black;
-    }
-    to {
-      border-right-color: transparent;
-    }
-  }
-  
-  /* Rimuove il bordo destro dopo l'animazione */
-  .anim-typewriter::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -2px; /* Imposta un offset negativo per allineare il cursore con l'ultima lettera */
-    width: 2px; /* Larghezza del cursore di scrittura */
-    height: 100%;
-    background-color: transparent; /* Colore del cursore */
-    animation: blinkTextCursorAfter 500ms steps(44) infinite normal;
-  }
-  
-  @keyframes blinkTextCursorAfter {
-    from {
-      background-color: black;
-    }
-    to {
-      background-color: transparent;
-    }
-  }
-  
+}
+
+.wave {
+  animation-name: wave-animation;  /* Refers to the name of your @keyframes element below */
+  animation-duration: 2.5s;        /* Change to speed up or slow down */
+  animation-iteration-count: infinite;  /* Never stop waving :) */
+  transform-origin: 70% 70%;       /* Pivot around the bottom-left palm */
+  display: inline-block;
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate( 0.0deg) }
+   10% { transform: rotate(14.0deg) }  /* The following five values can be played with to make the waving more or less extreme */
+   20% { transform: rotate(-8.0deg) }
+   30% { transform: rotate(14.0deg) }
+   40% { transform: rotate(-4.0deg) }
+   50% { transform: rotate(10.0deg) }
+   60% { transform: rotate( 0.0deg) }  /* Reset for the last half to pause */
+  100% { transform: rotate( 0.0deg) }
+}
+
+body { font-size: 3.5em }
+h1 { font-size: 0.5em }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 0.2em 0.2em; /* Adjust the top and bottom padding */
+  border-radius: 0.2em;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.badge-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.2em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.badge-text {
+  color: #333;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.2em;
+}
