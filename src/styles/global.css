@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .typewriter {
-  width: 14.5ch;
+  width: 9.5ch;
   animation: typing 2s steps(22), blink .5s step-end infinite alternate;
   white-space: nowrap;
   overflow: hidden;
