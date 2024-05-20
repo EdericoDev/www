@@ -6,13 +6,16 @@ import { Image } from 'astro:assets';
 import phantom from '../icons/phantom.png';
 import email from '../icons/email.png';
 import github from '../icons/github.png';
+import hl2 from '../icons/lambda.png';
 
 const allPosts = await getCollection('blog');
 ---
 
 <Layout>
-  <div class="prose mx-auto p-4">
+  <div class="prose mx-auto p-4 flex justify-center">
     <h1 class="typewriter">Hello There! <span class="wave">👋</span></h1>
+  </div>
+  <div class='flex justify-center space-x-4'>
 <a href="https://github.com/edericodev" class="badge">
   <Image src={github} alt="Icon" class="badge-icon" />
   <span class="badge-text">GitHub</span>
@@ -25,6 +28,12 @@ const allPosts = await getCollection('blog');
   <Image src={phantom} alt="Icon" class="badge-icon" />
   <span class="badge-text">Copy my mood</span>
 </a>
+<a href="https://ederico.dev/gaming" class="badge">
+  <Image src={hl2} alt="Icon" class="badge-icon" />
+  <span class="badge-text">Gaming</span>
+</a>
+</div>
+<div class="prose mx-auto p-4">
     <hr>
     <p> My nickname is edericodev or edericogames (he/him) and I'm a 14 years-old beginner developer based in Italy. I love open source and I'm always looking for new ideas.</p>
     <p> Since birth I've always been a windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen, GitHub , and Spotify as a support.</p>
