@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import phantom from '../icons/phantom.png';
+import email from '../icons/email.png';
+import github from '../icons/github.png';
+
+const allPosts = await getCollection('blog');
+---
+
+<Layout>
+  <div class="prose mx-auto p-4">
+    <h1 class="typewriter">Gaming Page <span class="wave">🎮</span></h1>
+    <a href="https://ederico.dev" class="badge">
+  <Image src={phantom} alt="Icon" class="badge-icon" />
+  <span class="badge-text">go back</span>
+</a>
+    <hr>
+    <p> I've been a fan of videogames since I was young. I've played many games in my free time (thanks gamepass and ps plus).</p>
+    <hr>
+    <p> I started with a wii w/ wii sports. I loved it and I've been playing it since. Then i moved on playstation 5 , nintendo switch and xbox one. <br>
+    Some of my favorite choices include: persona saga, the last of us, Aliens: isolation , half life and many more.</p>
+    <hr>
+  </main>
+</Layout>

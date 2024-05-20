@@ -3,7 +3,7 @@ import typography from '@tailwindcss/typography';
 
 export default {
   content: [
-    './src/**/*.{html,js,jsx,ts,tsx}', // Include all relevant paths
+    './src/**/*.{html,js,jsx,ts,tsx,astro}', // Include all relevant paths
     './src/pages/index.astro', // Include the root HTML file
   ],
   theme: {

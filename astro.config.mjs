@@ -3,11 +3,14 @@ import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
+import astroIcon from 'astro-icon';
+
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.kozhuhds.com',
+  site: 'https://ederico.dev',
   integrations: [
+    [astroIcon()],
     tailwind(),
     mdx({
       syntaxHighlight: false,

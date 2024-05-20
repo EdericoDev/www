@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .typewriter {
-  width: 10.5ch;
+  width: 13.5ch;
   animation: typing 2s steps(22), blink .5s step-end infinite alternate;
   white-space: nowrap;
   overflow: hidden;
@@ -48,11 +48,12 @@ h1 { font-size: 0.5em }
 .badge {
   display: inline-flex;
   align-items: center;
-  background-color: #f0f0f0;
   padding: 0.2em 0.2em; /* Adjust the top and bottom padding */
   border-radius: 0.2em;
   font-size: 14px;
   white-space: nowrap;
+  background-color: #E8E8E8;
+  max-height: content;
 }
 
 .badge-icon {
