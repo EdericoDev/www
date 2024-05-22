@@ -7,6 +7,7 @@ import phantom from '../icons/phantom.png';
 import email from '../icons/email.png';
 import github from '../icons/github.png';
 import hl2 from '../icons/lambda.png';
+import ColumnChart from '../components/ColumnChart.astro';
 
 const allPosts = await getCollection('blog');
 ---
@@ -38,9 +39,22 @@ const allPosts = await getCollection('blog');
     <p> My nickname is edericodev or edericogames (he/him) and I'm a 14 years-old beginner developer based in Italy. I love open source and I'm always looking for new ideas.</p>
     <p> Since birth I've always been a windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen, GitHub , and Spotify as a support.</p>
     <p> I work daily with tons of frameworks, and some of them (Astro, Tailwind , MDX and vercel) are right on this site! <br>
-    But i also love coding with simple code languages like C++ , Javascript , HTML and CSS (even if they're not coding languages).</p>
+    But i also love coding with code languages like C++ , Javascript , HTML and CSS (even if they're not coding languages).</p>
     <hr>
     <p> In my free time, i love to read, listen to music, play video games and , obiviously , learn new things. </p>
+    <hr>
+    <h1> My personal skills </h1>
+    <p> <b> NOTE:</b> i will update this chart when i learn new useful skills or i improve them. This is an exhaustive list of personal skills provided for demonstrative purposes only. </p>
+    <body class="flex items-center justify-center min-h-screen bg-gray-100">
+      <ColumnChart />
+    </body>
+    <h2>Blog Posts</h2>
+    <p> I don't really use blog posts, but Here are some of my most recent blog posts:</p>
+    <ul>
+      {allPosts.map((post) => (
+        <li><a href={`/blog/${post.slug}`} class="text-blue-500 hover:underline">{post.data.title}</a></li>
+      ))}
+    </ul>
     <hr>
     <p> watch what i am doing right now:</p>
     <img src="https://api.statusbadges.me/badge/status/1121087277792251975" alt="status"> 
@@ -48,13 +62,6 @@ const allPosts = await getCollection('blog');
     <img src="https://api.statusbadges.me/badge/vscode/1121087277792251975" alt="vscode"> 
     <a href="https://api.statusbadges.me/openspotify/1121087277792251975" target="_blank" rel="noopener">
     <img src="https://api.statusbadges.me/badge/spotify/1121087277792251975" alt="spotify"></a>
+    <p> thank you for browsing my site:) </p>
   </div>
-  <main class="prose mx-auto mt-8">
-    <h2>Blog Posts</h2>
-    <ul>
-      {allPosts.map((post) => (
-        <li><a href={`/blog/${post.slug}`} class="text-blue-500 hover:underline">{post.data.title}</a></li>
-      ))}
-    </ul>
-  </main>
 </Layout>
