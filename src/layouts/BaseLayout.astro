@@ -1,0 +1,21 @@
+---
+// src/layouts/BaseLayout.astro
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body class="bg-black text-white">
+    <header class="p-4">
+      <h1 class="text-neon text-center">My Portfolio</h1>
+    </header>
+    <main>
+      <slot /> <!-- Content will be injected here -->
+    </main>
+    <footer class="text-center p-4 text-gray-400">© 2024 Your Name</footer>
+  </body>
+</html>
+

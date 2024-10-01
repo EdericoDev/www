@@ -1,67 +1,49 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import '../styles/global.css';
-import { Image } from 'astro:assets';
-import phantom from '../icons/phantom.png';
-import email from '../icons/email.png';
-import github from '../icons/github.png';
-import hl2 from '../icons/lambda.png';
-import ColumnChart from '../components/ColumnChart.astro';
-
-const allPosts = await getCollection('blog');
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';  // Main layout with header/footer
+import Button from '../components/button.astro';  // Custom Button component with hover effect
+import Typewriter from '../components/typewriter.astro';  // Typewriter effect for titles
 ---
 
-<Layout>
-  <div class="prose mx-auto p-4">
-    <h1 class="typewriter">Hello There! <span class="wave">👋</span></h1>
-  </div>
-  <div class='flex flex-wrap justify-center space-x-4'>
-<a href="https://github.com/edericodev" class="badge">
-  <Image src={github} alt="Icon" class="badge-icon" />
-  <span class="badge-text">GitHub</span>
-</a>
-<a href="mailto:hello@ederico.dev" class="badge">
-  <Image src={email} alt="Icon" class="badge-icon" />
-  <span class="badge-text">Email Me!</span>
-</a>
-    <a href="https://open.spotify.com/playlist/7ujDwPWAJ3C3iyG4Zdq01s?si=5d335a313d1b4454" class="badge">
-  <Image src={phantom} alt="Icon" class="badge-icon" />
-  <span class="badge-text">Copy my mood</span>
-</a>
-<a href="https://ederico.dev/gaming" class="badge">
-  <Image src={hl2} alt="Icon" class="badge-icon" />
-  <span class="badge-text">Gaming</span>
-</a>
-</div>
-<div class="prose mx-auto p-4">
-    <hr>
-    <p> My nickname is edericodev or edericogames (he/him) and I'm a 15 years-old beginner developer based in Italy. I love open source and I'm always looking for new ideas.</p>
-    <p> Since birth I've always been a windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen, GitHub , and Spotify as a support.</p>
-    <p> I work daily with tons of frameworks, and some of them (Astro, Tailwind , MDX and vercel) are right on this site! <br>
-    But i also love coding with code languages like C++ , Javascript , HTML and CSS (even if they're not coding languages).</p>
-    <hr>
-    <p> In my free time, i love to read, listen to music, play video games and , obiviously , learn new things. </p>
-    <hr>
-    <h1> My personal skills </h1>
-    <p> <b> NOTE:</b> i will update this chart when i learn new useful skills or i improve them. This is an exhaustive list of personal skills provided for demonstrative purposes only. </p>
-    <body class="flex items-center justify-center min-h-screen bg-gray-100">
-      <ColumnChart />
-    </body>
-    <h2>Blog Posts</h2>
-    <p> I don't really use blog posts, but Here are some of my most recent blog posts:</p>
-    <ul>
-      {allPosts.map((post) => (
-        <li><a href={`/blog/${post.slug}`} class="text-blue-500 hover:underline">{post.data.title}</a></li>
-      ))}
-    </ul>
-    <hr>
-    <p> watch what i am doing right now:</p>
-    <img src="https://api.statusbadges.me/badge/status/1121087277792251975" alt="status"> 
-    <img src="https://api.statusbadges.me/badge/playing/1121087277792251975" alt="playing">
-    <img src="https://api.statusbadges.me/badge/vscode/1121087277792251975" alt="vscode"> 
-    <a href="https://api.statusbadges.me/openspotify/1121087277792251975" target="_blank" rel="noopener">
-    <img src="https://api.statusbadges.me/badge/spotify/1121087277792251975" alt="spotify"></a>
-    <p> thank you for browsing my site:) </p>
-  </div>
-</Layout>
+<BaseLayout>
+  <!-- Hero Section -->
+  <section class="hero-section min-h-screen flex flex-col items-center justify-center bg-black text-white">
+    <!-- Typewriter Effect for the main title -->
+    <Typewriter text="Welcome to My Digital World" />
+    
+    <p class="mt-4 text-center max-w-xl text-gray-300">
+      I'm a passionate web developer who creates modern and visually striking web applications.
+      Explore my work and get to know more about my expertise in frontend development.
+    </p>
+
+    <!-- Button Links -->
+    <div class="mt-8 flex space-x-4">
+      <!-- Buttons for navigating to different sections -->
+      <Button text="View Projects" />
+      <Button text="Contact Me" />
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="projects-section mt-16 text-center">
+    <h2 class="text-3xl text-neon mb-8">Featured Projects</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <!-- Example Project Cards -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-white">Project 1</h3>
+        <p class="text-gray-400 mt-2">An exciting project that showcases my skills in frontend development.</p>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-white">Project 2</h3>
+        <p class="text-gray-400 mt-2">Another cool project with modern UI and animations.</p>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-white">Project 3</h3>
+        <p class="text-gray-400 mt-2">A personal project built with Solid.js and Astro.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

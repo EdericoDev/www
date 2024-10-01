@@ -1,0 +1,35 @@
+---
+// src/components/CardSlider.astro
+import { createSignal } from 'solid-js';
+
+export let cards = []; // Array of card data like [{title, description, img}, ...]
+let scrollContainer;
+
+const scrollBy = (distance) => {
+  scrollContainer.scrollBy({ left: distance, behavior: 'smooth' });
+};
+---
+
+<div class="relative w-full max-w-7xl mx-auto">
+  <!-- Left Arrow -->
+  <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10"
+    onClick={() => scrollBy(-300)}>
+    ←
+  </button>
+
+  <!-- Cards Container -->
+  <div ref={scrollContainer} class="flex overflow-x-auto space-x-6 scroll-smooth">
+    {cards.map(card => (
+      <div class="w-80 flex-shrink-0 bg-gray-800 p-4 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-white">{card.title}</h3>
+        <p class="text-gray-400 mt-2">{card.description}</p>
+      </div>
+    ))}
+  </div>
+
+  <!-- Right Arrow -->
+  <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10"
+    onClick={() => scrollBy(300)}>
+    →
+  </button>
+</div>
