@@ -4,6 +4,7 @@ import TypewriterTitle from '../components/TypewriterTitle.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Button from '../components/Button.astro';
 import Badge from "../components/Badge.astro";
+import Spotify from '../components/Spotify.svelte';
 
 const projects = [
     {
@@ -32,6 +33,8 @@ const projects = [
             <TypewriterTitle/>
         </div>
     </header>
+
+    <Spotify client:load />
 
     <main class="py-16">
         <div class="container mx-auto px-4 sm:px-8">
