@@ -1,16 +1,12 @@
 ---
-// src/components/Button.astro
-export let text;
-export let icon;
-
-const buttonStyle = `
-  text-neon font-semibold hover:scale-105 transition-transform flex items-center
-  px-4 py-2 rounded-md bg-transparent border border-neon hover:bg-neon hover:text-black
-`;
+// Button.astro
+const { href, text, style } = Astro.props;
 ---
 
-<button class={buttonStyle}>
-  {icon && <img src={icon} alt="icon" class="w-5 h-5 mr-2" />}
-  <span>{text}</span>
+<button 
+    class="text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+    style={`background-color: ${style};`}
+    onclick={`window.location.href='${href}';`}>
+    {text}
 </button>
 

@@ -1,0 +1,44 @@
+---
+// TypewriterTitle.astro
+const title = Astro.props.title;
+---
+
+<div class="flex justify-center items-center text-center">
+    <span id="title" class="title text-3xl md:text-4xl lg:text-5xl font-bold"></span> 
+    <span class="wave title text-3xl md:text-4xl lg:text-5xl font-bold">👋</span>
+</div>
+
+<script>
+    const title = "Hello"; 
+    const titleElement = document.getElementById("title");
+    let i = 0;
+
+    function typeWriter() {
+        if (i < title.length) {
+            titleElement.innerHTML += title.charAt(i);
+            i++;
+            setTimeout(typeWriter, 100); 
+        }
+    }
+
+    typeWriter();
+</script>
+
+<style>
+    .wave {
+        animation: wave-animation 2.5s infinite;
+        transform-origin: 70% 70%;
+        display: inline-block;
+    }
+
+    @keyframes wave-animation {
+        0% { transform: rotate(0deg); }
+        10% { transform: rotate(14deg); }
+        20% { transform: rotate(-8deg); }
+        30% { transform: rotate(14deg); }
+        40% { transform: rotate(-4deg); }
+        50% { transform: rotate(10.0deg); }
+        60% { transform: rotate(0deg); }
+        100% { transform: rotate(0deg); }
+    }
+</style>
