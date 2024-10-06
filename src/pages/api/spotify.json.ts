@@ -45,6 +45,7 @@ export type SpotifyResponse =
       artists: { name: string; href: string; }[] | null;
     };
 
+
     const getLastSong = async (): Promise<SpotifyResponse> => {
       const lastSpotifySong = (await redis.get("last-spotify-song").catch((err) => {
         console.error(err);

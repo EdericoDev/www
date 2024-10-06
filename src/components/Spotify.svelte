@@ -40,7 +40,7 @@
           <div class="flex items-center space-x-4">
             <div class="w-16 h-16 flex-shrink-0">
               <img
-                src={data.thumbnailUrl || 'path/to/default/album-cover.jpg'}
+                src={data.thumbnailUrl || '/path/to/default/album-cover.jpg'}
                 class="w-full h-full object-cover rounded-md"
                 alt={data.name || "Album cover"}
                 on:load={() => (isLoading = false)}
@@ -48,10 +48,22 @@
             </div>
             <div class="flex-grow">
               <h3 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
-                {data.name || "Not playing"}
+                {#if data.href}
+                  <a href={data.href} target="_blank" rel="noopener noreferrer" class="hover:underline">
+                    {data.name || "Not playing"}
+                  </a>
+                {:else}
+                  {data.name || "Not playing"}
+                {/if}
               </h3>
               <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                {data.artists?.[0]?.name || "No artist"}
+                {#if data.artists && data.artists.length > 0}
+                  <a href={data.artists[0].href} target="_blank" rel="noopener noreferrer" class="hover:underline">
+                    {data.artists[0].name}
+                  </a>
+                {:else}
+                  No artist
+                {/if}
               </p>
               <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">
                 {data.isListening ? "Currently playing" : "Last played"}
@@ -80,3 +92,4 @@
       }
     }
   </style>
+  
