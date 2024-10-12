@@ -36,8 +36,8 @@ async function getUserData(accessToken: string) {
   return response.json();
 }
 
-async function getRecentLazerActivity(accessToken: string) {
-  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent?mode=lazer`, {
+async function getRecentActivity(accessToken: string) {
+  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -45,7 +45,6 @@ async function getRecentLazerActivity(accessToken: string) {
 
   return response.json();
 }
-
 
 export type OsuResponse = {
   userId: string;
@@ -61,7 +60,6 @@ export type OsuResponse = {
     score: number;
     accuracy: number;
     rank: string;
-    ruleset: string;
   } | null;
 };
 
@@ -69,7 +67,7 @@ export const GET: APIRoute = async ({ params, request }) => {
   try {
     const accessToken = await getAccessToken();
     const userData = await getUserData(accessToken);
-    const recentActivity = await getRecentLazerActivity(accessToken);
+    const recentActivity = await getRecentActivity(accessToken);
 
     const osuData: OsuResponse = {
       userId: userData.id,
@@ -85,7 +83,6 @@ export const GET: APIRoute = async ({ params, request }) => {
         score: recentActivity[0].score,
         accuracy: recentActivity[0].accuracy * 100,
         rank: recentActivity[0].rank,
-        ruleset: recentActivity[0].ruleset.short_name,
       } : null,
     };
 
@@ -96,8 +93,8 @@ export const GET: APIRoute = async ({ params, request }) => {
       }
     });
   } catch (error) {
-    console.error("Error fetching osu!lazer data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch osu!lazer data" }), {
+    console.error("Error fetching osu! data:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch osu! data" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json"
