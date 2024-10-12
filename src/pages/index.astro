@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import Button from '../components/button.astro';
 import Badge from "../components/Badge.astro";
 import Spotify from '../components/Spotify.svelte';
+import Osu from '../components/Osu.svelte';
 
 const projects = [
     {
@@ -39,6 +40,7 @@ const projects = [
 
             <section class="mb-16">
                 <Spotify client:load />
+                <Osu client:load />
                 <h2 class="text-3xl font-bold mb-4 text-center">About Me</h2>
                 <p class="text-lg mx-auto max-w-2xl text-justify">
                     My nickname is edericodev or edericogames (he/him) and I'm a 15 years-old beginner self taught developer based in <Badge type="italy" href="https://youtu.be/drojd1HYtcM?si=xvjPnkDNgscCGHqA" label="Italy" />. <br> I love open source and I'm always looking for new ideas.
