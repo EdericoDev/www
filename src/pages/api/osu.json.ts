@@ -47,6 +47,7 @@ async function getRecentActivity(accessToken: string) {
 }
 
 export type OsuResponse = {
+  userId: string;
   username: string;
   avatarUrl: string;
   globalRank: number;
@@ -69,6 +70,7 @@ export const GET: APIRoute = async ({ params, request }) => {
     const recentActivity = await getRecentActivity(accessToken);
 
     const osuData: OsuResponse = {
+      userId: userData.id,
       username: userData.username,
       avatarUrl: userData.avatar_url,
       globalRank: userData.statistics.global_rank,

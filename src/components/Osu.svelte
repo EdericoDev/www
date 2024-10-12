@@ -48,7 +48,9 @@
               </div>
               <div class="flex-grow">
                 <h3 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
-                  {data.username}
+                  <a href={`https://osu.ppy.sh/users/${data.userId}`} target="_blank" rel="noopener noreferrer" class="hover:underline">
+                    {data.username}
+                  </a>
                 </h3>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400">
                   Global Rank: #{data.globalRank} | Country Rank: #{data.countryRank}
