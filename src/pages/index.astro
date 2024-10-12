@@ -6,6 +6,7 @@ import Button from '../components/button.astro';
 import Badge from "../components/Badge.astro";
 import Spotify from '../components/Spotify.svelte';
 import Osu from '../components/Osu.svelte';
+import Links from '../components/Links.astro';
 
 const projects = [
     {
@@ -43,15 +44,17 @@ const projects = [
         </div>
     </header>
 
+    <Links />
+
     <main class="py-16">
         <div class="container mx-auto px-4 sm:px-8">
 
             <section class="mb-16">
                 <p class="text-lg mx-auto max-w-2xl text-justify">
-                    My nickname is edericodev or edericogames (he/him) and I'm a 15 years-old beginner self taught developer based in <Badge type="italy" href="https://youtu.be/drojd1HYtcM?si=xvjPnkDNgscCGHqA" label="Italy" />. <br> I love open source and I'm always looking for new ideas.
-                    I've always been a Windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen and GitHub.
-                    I work daily with tons of frameworks, and some of them (Astro, Tailwind , vercel) are right on this site!
-                    But i also love coding with code languages like python , Javascript , HTML and CSS (even if they're not coding languages).
+                    My nickname is edericodev or edericogames (he/him) and I'm a 15 years-old beginner self taught developer based in <Badge type="italy" href="https://youtu.be/drojd1HYtcM?si=xvjPnkDNgscCGHqA" label="Italy" />. <br> I love open source and I'm always looking for new ideas. <br>
+                    I've always been a Windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen and GitHub. <br>
+                    My journey began a couple years ago with discord bots , then i moved to web developing and more complete projects. <br>
+                    However, i also love coding with code languages like python , Javascript , HTML and CSS (even if they're not coding languages).
                 </p>
                 <div class="flex justify-center mt-4">
                 </div>
@@ -86,14 +89,11 @@ const projects = [
                         <Spotify client:load />
                     </div>
                 </div>
+                <p class="text-lg text-center mx-auto max-w-2xl mt-8">
+                    The entire website was built with <Badge type="astro" href="https://astro.build/" label="astro" />, <Badge type="tailwindcss" href="https://tailwindcss.com/" label="tailwind" />, and <Badge type="svelte" href="https://open.spotify.com/user/31w3g2o6tkydwgjzyuntt42gpi54?si=fdeb7fa8d94e45b7" label="https://svelte.dev/" />
+                </p>
             </section>
-                       
         </div>
     </main>
 
-    <footer class="py-8">
-        <div class="container mx-auto text-center text-gray-400">
-            &copy; {new Date().getFullYear()} My Portfolio. All rights reserved.
-        </div>
-    </footer>
 </BaseLayout>
