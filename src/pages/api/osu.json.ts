@@ -90,7 +90,7 @@ export const GET: APIRoute = async ({ params, request }) => {
         beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset?.id}#osu/${recentActivity[0].beatmap?.id}`,
         score: recentActivity[0].score ?? 0,
         accuracy: (recentActivity[0].accuracy ?? 0) * 100,
-        rank: recentActivity[0].rank ?? 'Unknown',
+        rank: `${recentActivity[0].rank ?? 'Unknown'} (${recentActivity[0].beatmap?.version ?? 'Unknown'})`,
         difficulty: {
           name: recentActivity[0].beatmap?.version ?? 'Unknown',
           star_rating: recentActivity[0].beatmap?.difficulty_rating ?? 0,
@@ -114,5 +114,4 @@ export const GET: APIRoute = async ({ params, request }) => {
     });
   }
 };
-
 
