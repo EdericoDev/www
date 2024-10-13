@@ -36,7 +36,7 @@ async function getUserData(accessToken: string) {
 }
 
 async function getRecentActivity(accessToken: string) {
-  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent?mode=lazer&limit=1`, {
+  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent?limit=1`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -59,7 +59,6 @@ export type OsuResponse = {
     score: number;
     accuracy: number;
     rank: string;
-    ruleset: string;
     difficulty: {
       name: string;
       star_rating: number;
@@ -88,11 +87,10 @@ export const GET: APIRoute = async ({ params, request }) => {
       accuracy: userData.statistics?.hit_accuracy ?? null,
       lastPlayed: recentActivity[0] ? {
         beatmapTitle: recentActivity[0].beatmapset?.title ?? 'Unknown',
-        beatmapUrl: recentActivity[0].beatmap?.url ?? '#',
+        beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset?.id}#osu/${recentActivity[0].beatmap?.id}`,
         score: recentActivity[0].score ?? 0,
         accuracy: (recentActivity[0].accuracy ?? 0) * 100,
         rank: recentActivity[0].rank ?? 'Unknown',
-        ruleset: recentActivity[0].mode ?? 'osu',
         difficulty: {
           name: recentActivity[0].beatmap?.version ?? 'Unknown',
           star_rating: recentActivity[0].beatmap?.difficulty_rating ?? 0,
@@ -116,4 +114,5 @@ export const GET: APIRoute = async ({ params, request }) => {
     });
   }
 };
+
 
