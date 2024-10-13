@@ -62,14 +62,17 @@
             </div>
             {#if data.lastPlayed}
               <div class="mt-4">
-                <h4 class="text-md font-semibold text-zinc-700 dark:text-zinc-300">Last Played:</h4>
-                <a href={data.lastPlayed.beatmapUrl} target="_blank" rel="noopener noreferrer" class="text-sm text-blue-500 hover:underline">
-                  {data.lastPlayed.beatmapTitle}
-                </a>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                  Score: {data.lastPlayed.score} | Accuracy: {data.lastPlayed.accuracy.toFixed(2)}% | Rank: {data.lastPlayed.rank}
-                </p>
-              </div>
+              <h4 class="text-md font-semibold text-zinc-700 dark:text-zinc-300">Last Played:</h4>
+              <a href={data.lastPlayed.beatmapUrl} target="_blank" rel="noopener noreferrer" class="text-sm text-blue-500 hover:underline">
+              {data.lastPlayed.beatmapTitle}
+              </a>
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              Score: {data.lastPlayed.score} | Accuracy: {data.lastPlayed.accuracy.toFixed(2)}% | Rank: {data.lastPlayed.rank}
+              </p>
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              {data.lastPlayed.difficulty} ({data.lastPlayed.starRating.toFixed(2)} stars)
+              </p>
+             </div>
             {/if}
           </div>
         {/if}
