@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { z } from "zod";
 
 const OSU_API_URL = "https://osu.ppy.sh/api/v2";
 const OSU_TOKEN_URL = "https://osu.ppy.sh/oauth/token";
@@ -37,7 +36,7 @@ async function getUserData(accessToken: string) {
 }
 
 async function getRecentActivity(accessToken: string) {
-  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent`, {
+  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent?mode=lazer&limit=1`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -50,10 +49,10 @@ export type OsuResponse = {
   userId: string;
   username: string;
   avatarUrl: string;
-  globalRank: number;
-  countryRank: number;
-  pp: number;
-  accuracy: number;
+  globalRank: number | null;
+  countryRank: number | null;
+  pp: number | null;
+  accuracy: number | null;
   lastPlayed: {
     beatmapTitle: string;
     beatmapUrl: string;
@@ -71,27 +70,32 @@ export type OsuResponse = {
 export const GET: APIRoute = async ({ params, request }) => {
   try {
     const accessToken = await getAccessToken();
+    console.log("Access Token:", accessToken);
+
     const userData = await getUserData(accessToken);
+    console.log("User Data:", userData);
+
     const recentActivity = await getRecentActivity(accessToken);
+    console.log("Recent Activity:", recentActivity);
 
     const osuData: OsuResponse = {
       userId: userData.id,
       username: userData.username,
       avatarUrl: userData.avatar_url,
-      globalRank: userData.statistics.global_rank,
-      countryRank: userData.statistics.country_rank,
-      pp: userData.statistics.pp,
-      accuracy: userData.statistics.hit_accuracy,
+      globalRank: userData.statistics?.global_rank ?? null,
+      countryRank: userData.statistics?.country_rank ?? null,
+      pp: userData.statistics?.pp ?? null,
+      accuracy: userData.statistics?.hit_accuracy ?? null,
       lastPlayed: recentActivity[0] ? {
-        beatmapTitle: recentActivity[0].beatmapset.title,
-        beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset.id}#${recentActivity[0].ruleset.short_name}/${recentActivity[0].beatmap.id}`,
-        score: recentActivity[0].score,
-        accuracy: recentActivity[0].accuracy * 100,
-        rank: recentActivity[0].rank,
-        ruleset: recentActivity[0].ruleset.short_name,
+        beatmapTitle: recentActivity[0].beatmapset?.title ?? 'Unknown',
+        beatmapUrl: recentActivity[0].beatmap?.url ?? '#',
+        score: recentActivity[0].score ?? 0,
+        accuracy: (recentActivity[0].accuracy ?? 0) * 100,
+        rank: recentActivity[0].rank ?? 'Unknown',
+        ruleset: recentActivity[0].mode ?? 'osu',
         difficulty: {
-          name: recentActivity[0].beatmap.version,
-          star_rating: recentActivity[0].beatmap.difficulty_rating,
+          name: recentActivity[0].beatmap?.version ?? 'Unknown',
+          star_rating: recentActivity[0].beatmap?.difficulty_rating ?? 0,
         },
       } : null,
     };
@@ -103,8 +107,8 @@ export const GET: APIRoute = async ({ params, request }) => {
       }
     });
   } catch (error) {
-    console.error("Error fetching osu!lazer data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch osu!lazer data" }), {
+    console.error("Error fetching osu! data:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch osu! data", details: error.message }), {
       status: 500,
       headers: {
         "Content-Type": "application/json"
@@ -112,3 +116,4 @@ export const GET: APIRoute = async ({ params, request }) => {
     });
   }
 };
+
