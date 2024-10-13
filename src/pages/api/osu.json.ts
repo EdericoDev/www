@@ -60,6 +60,11 @@ export type OsuResponse = {
     score: number;
     accuracy: number;
     rank: string;
+    ruleset: string;
+    difficulty: {
+      name: string;
+      star_rating: number;
+    };
   } | null;
 };
 
@@ -79,10 +84,15 @@ export const GET: APIRoute = async ({ params, request }) => {
       accuracy: userData.statistics.hit_accuracy,
       lastPlayed: recentActivity[0] ? {
         beatmapTitle: recentActivity[0].beatmapset.title,
-        beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset.id}`,
+        beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset.id}#${recentActivity[0].ruleset.short_name}/${recentActivity[0].beatmap.id}`,
         score: recentActivity[0].score,
         accuracy: recentActivity[0].accuracy * 100,
         rank: recentActivity[0].rank,
+        ruleset: recentActivity[0].ruleset.short_name,
+        difficulty: {
+          name: recentActivity[0].beatmap.version,
+          star_rating: recentActivity[0].beatmap.difficulty_rating,
+        },
       } : null,
     };
 
@@ -93,8 +103,8 @@ export const GET: APIRoute = async ({ params, request }) => {
       }
     });
   } catch (error) {
-    console.error("Error fetching osu! data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch osu! data" }), {
+    console.error("Error fetching osu!lazer data:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch osu!lazer data" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json"
