@@ -5,7 +5,7 @@ description: "Hello, world!"
 ---
 
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TypewriterTitle from '../components/TypewriterTitle.astro';
+import Greeting from '../components/Welcome.svelte';
 import Button from '../components/button.astro';
 import Badge from "../components/Badge.astro";
 import Spotify from '../components/Spotify.svelte';
@@ -14,7 +14,7 @@ import Links from '../components/Links.astro';
 import Posts from '../components/Posts.astro';
 import Navigation from '../components/SiteLogo.astro';
 
-<TypewriterTitle />
+<Greeting client:load />
 
 My nickname is edericodev or edericogames (he/him), and I'm a 15-year-old beginner self-taught developer based in <Badge type="italy" href="https://youtu.be/drojd1HYtcM?si=xvjPnkDNgscCGHqA" label="Italy" />. 
 
