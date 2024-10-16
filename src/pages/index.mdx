@@ -1,0 +1,49 @@
+---
+layout: "@layouts/BlogLayout.astro"
+title: "home"
+description: "Hello, world!"
+---
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TypewriterTitle from '../components/TypewriterTitle.astro';
+import Button from '../components/button.astro';
+import Badge from "../components/Badge.astro";
+import Spotify from '../components/Spotify.svelte';
+import Osu from '../components/Osu.svelte';
+import Links from '../components/Links.astro';
+import Posts from '../components/Posts.astro';
+import Navigation from '../components/SiteLogo.astro';
+
+<TypewriterTitle />
+
+My nickname is edericodev or edericogames (he/him), and I'm a 15-year-old beginner self-taught developer based in <Badge type="italy" href="https://youtu.be/drojd1HYtcM?si=xvjPnkDNgscCGHqA" label="Italy" />. 
+
+I love open source and I'm always looking for new ideas. I've always been a Windows user. My favorite tools for exploring this awesome world include: VSCode, CodePen, and GitHub.
+
+My journey began a couple of years ago with Discord bots, then I moved to web development and more complete projects. However, I also love coding with languages like Python, Javascript, HTML, and CSS (even if they're not coding languages).
+
+<Links />
+
+## Blog
+
+Below you can see my blog posts, even though I don't use them much.
+
+<Posts />
+
+## My Projects
+
+<ProjectsCard />
+
+---
+
+In my free time, I play <Badge type="osu" href="https://osu.ppy.sh/users/34603157" label="osu!" />. I really enjoy the standard mode. However, I'm not good at mania, catch, or taiko. Check my real-time stats below:
+
+<Osu client:load />
+
+I also listen to pretty much every genre on <Badge type="spotify" href="https://open.spotify.com/user/31w3g2o6tkydwgjzyuntt42gpi54?si=fdeb7fa8d94e45b7" label="spotify" />. Check what I'm into below:
+
+<Spotify client:load />
+
+---
+
+The entire website was built with <Badge type="astro" href="https://astro.build/" label="astro" />, <Badge type="tailwindcss" href="https://tailwindcss.com/" label="tailwind" />, and <Badge type="svelte" href="https://svelte.dev/" label="svelte" />.

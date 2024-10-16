@@ -22,7 +22,7 @@
     </script>
     
     <div class="osu-widget">
-      <div class="relative w-full">
+      <div class="relative w-full not-prose">
         {#if isLoading}
           <div
             transition:fade={{ delay: 0, duration: 250 }}
