@@ -55,7 +55,7 @@
 .wave {
   animation-name: wave-animation;
   animation-duration: 2s;
-  animation-iteration-count: 1;
+  animation-iteration-count: infinite;
   transform-origin: 70% 70%;
   display: inline-block;
   animation-delay: 0.5s;
