@@ -1,10 +1,9 @@
 ---
-// TypewriterTitle.astro
 const title = Astro.props.title;
 ---
 
 <div class="flex justify-center items-center text-center">
-    <span id="title" class="title text-3xl md:text-4xl lg:text-5xl font-bold"></span> 
+    <span id="title" class="title text-3xl md:text-4xl lg:text-5xl font-bold comic-sans"></span> 
     <span class="wave title text-3xl md:text-4xl lg:text-5xl font-bold">👋</span>
 </div>
 
@@ -25,6 +24,12 @@ const title = Astro.props.title;
 </script>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+
+    .comic-sans {
+        font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+    }
+
     .wave {
         animation: wave-animation 2.5s infinite;
         transform-origin: 70% 70%;
