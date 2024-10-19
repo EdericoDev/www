@@ -1,6 +1,11 @@
 import type { APIRoute } from 'astro';
 import env from "env-var";
-import * as psn from 'psn-api';
+
+// Use `require` for psn-api because it's a CommonJS module
+import Module from 'node:module';
+const require = Module.createRequire(import.meta.url);
+const { exchangeNpssoForCode, exchangeCodeForAccessToken, getUserTitles, getRecentlyPlayedGames, getProfileFromUserName } = require('psn-api');
+
 import { kv } from '@vercel/kv';
 
 interface TrophyCounts {
@@ -26,9 +31,9 @@ async function getAccessToken(): Promise<any> {
   const PSN_NPSSO_TOKEN = env.get('PSN_NPSSO_TOKEN').required().asString();
   try {
     console.log('Exchanging NPSSO for access code');
-    const accessCode = await psn.exchangeNpssoForCode(PSN_NPSSO_TOKEN);
+    const accessCode = await exchangeNpssoForCode(PSN_NPSSO_TOKEN);
     console.log('Exchanging access code for authorization');
-    return await psn.exchangeCodeForAccessToken(accessCode);
+    return await exchangeCodeForAccessToken(accessCode);
   } catch (error) {
     console.error('Error in getAccessToken:', error);
     throw new Error('Failed to obtain access token');
@@ -69,18 +74,18 @@ export const get: APIRoute = async ({ request }) => {
     const authorization = await getAccessToken();
 
     console.log('Fetching recently played games');
-    const { data: { gameLibraryTitlesRetrieve: recentlyPlayedGames } } = await psn.getRecentlyPlayedGames(
+    const { data: { gameLibraryTitlesRetrieve: recentlyPlayedGames } } = await getRecentlyPlayedGames(
       authorization
     );
 
     console.log('Fetching user trophy titles');
-    const trophies = await psn.getUserTitles(
+    const trophies = await getUserTitles(
       authorization,
       'me'
     );
 
     console.log('Fetching user profile');
-    const { profile } = await psn.getProfileFromUserName(authorization, 'me');
+    const { profile } = await getProfileFromUserName(authorization, 'me');
 
     const lastPlayedGame = recentlyPlayedGames.games
       .filter(g => g.platform !== 'UNKNOWN')
