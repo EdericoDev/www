@@ -1,7 +1,7 @@
 {
   "functions": {
-    "api/psn.json.ts": {
-      "includeFiles": "node_modules/**"
+    "api/*.ts": {
+      "runtime": "nodejs18.x"  // Make sure Node.js 18+ is used
     }
   }
 }
