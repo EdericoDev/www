@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/*.ts": {
-      "runtime": "nodejs18.x"  // Make sure Node.js 18+ is used
+      "runtime": "nodejs18.x"
     }
   }
 }
