@@ -9,6 +9,8 @@ import {
 
 let authorization = null;
 
+const PSN_USERNAME = process.env.PSN_USERNAME;
+
 async function authenticate() {
   if (!authorization || isAccessTokenExpired()) {
     const npsso = process.env.NPSSO;
@@ -26,7 +28,6 @@ export const GET: APIRoute = async () => {
   try {
     await authenticate();
     
-    const PSN_USERNAME = process.env.PSN_USERNAME;
     const searchResults = await makeUniversalSearch(authorization, (PSN_USERNAME), "SocialAllAccounts");
     const accountId = searchResults.domainResponses[0].results[0].socialMetadata.accountId;
     const userData = searchResults.domainResponses[0].results[0];

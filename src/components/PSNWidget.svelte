@@ -26,7 +26,6 @@
     {/if}
     {#if data}
       <div class="rounded-lg border p-4 shadow-md mb-4 bg-white dark:bg-zinc-900">
-        <!-- Profile Information -->
         <div class="flex items-center space-x-4">
           <img src={data.profile.avatarUrl} class="w-16 h-16 rounded-full" alt={data.profile.onlineId} />
           <div>
@@ -38,7 +37,6 @@
           </div>
         </div>
 
-        <!-- Last Played Game -->
         {#if data.lastPlayedGame}
           <div class="mt-4">
             <h4 class="text-md font-semibold text-zinc-700 dark:text-zinc-300">Last Played Game:</h4>
