@@ -7,7 +7,7 @@
 
   onMount(async () => {
     try {
-      const rawResponse = await fetch("/api/psn-trophies");
+      const rawResponse = await fetch("../pages/api/psn.json.ts");
       if (!rawResponse.ok) throw new Error(`HTTP error! status: ${rawResponse.status}`);
 
       data = await rawResponse.json();

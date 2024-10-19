@@ -24,12 +24,10 @@ async function refreshAuthData(): Promise<void> {
     const authorization = await psn.exchangeCodeForAccessToken(accessCode);
     updateAuthData(authorization);
   } else {
-    // Refresh using refresh token
     try {
       const updatedAuthorization = await psn.exchangeRefreshTokenForAuthTokens(authData.refreshToken);
       updateAuthData(updatedAuthorization);
     } catch (error) {
-      // If refresh token is invalid, start over with NPSSO token
       console.error("Error refreshing token, starting over:", error);
       const accessCode = await psn.exchangeNpssoForCode(PSN_NPSSO_TOKEN);
       const authorization = await psn.exchangeCodeForAccessToken(accessCode);
