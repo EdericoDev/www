@@ -1,68 +1,71 @@
 import type { APIRoute } from "astro";
+import {
+  exchangeCodeForAccessToken,
+  exchangeNpssoForCode,
+  getUserTitles,
+  getUserTrophiesEarnedForTitle,
+  makeUniversalSearch,
+} from "psn-api";
 
-const PSN_API_URL = "https://psn-api.achievements.app/v1/";
-const PSN_USERNAME = import.meta.env.PSN_USERNAME;
+let authorization = null;
 
-export type PSNResponse = {
-  accountId: string;
-  onlineId: string;
-  avatarUrl: string;
-  trophyLevel: number;
-  trophies: {
-    bronze: number;
-    silver: number;
-    gold: number;
-    platinum: number;
-  };
-  lastPlayedGame: {
-    name: string;
-    imageUrl: string;
-    trophyProgress: number;
-  } | null;
+async function authenticate() {
+  if (!authorization || isAccessTokenExpired()) {
+    const npsso = process.env.NPSSO;
+    const accessCode = await exchangeNpssoForCode(npsso);
+    authorization = await exchangeCodeForAccessToken(accessCode);
+  }
+}
+
+const isAccessTokenExpired = () => {
+  const now = new Date();
+  return new Date(now.getTime() + authorization.expiresIn * 1000).getTime() < now.getTime();
 };
 
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async () => {
   try {
-    const userResponse = await fetch(`${PSN_API_URL}players/${PSN_USERNAME}`);
-    const userData = await userResponse.json();
+    await authenticate();
+    
+    const PSN_USERNAME = process.env.PSN_USERNAME;
+    const searchResults = await makeUniversalSearch(authorization, (PSN_USERNAME), "SocialAllAccounts");
+    const accountId = searchResults.domainResponses[0].results[0].socialMetadata.accountId;
+    const userData = searchResults.domainResponses[0].results[0];
 
-    const trophiesResponse = await fetch(`${PSN_API_URL}players/${PSN_USERNAME}/trophies`);
-    const trophiesData = await trophiesResponse.json();
+    const { trophyTitles } = await getUserTitles(authorization, accountId);
+    const lastPlayedGame = trophyTitles[0]; 
 
-    const recentGamesResponse = await fetch(`${PSN_API_URL}players/${PSN_USERNAME}/recent-games`);
-    const recentGamesData = await recentGamesResponse.json();
+    const earnedCounts = trophyTitles.reduce(
+      (acc, title) => ({
+        platinum: acc.platinum + title.earnedTrophies.platinum,
+        gold: acc.gold + title.earnedTrophies.gold,
+        silver: acc.silver + title.earnedTrophies.silver,
+        bronze: acc.bronze + title.earnedTrophies.bronze,
+      }),
+      { platinum: 0, gold: 0, silver: 0, bronze: 0 }
+    );
 
-    const psnData: PSNResponse = {
-      accountId: userData.accountId,
-      onlineId: userData.onlineId,
-      avatarUrl: userData.avatarUrl,
-      trophyLevel: userData.trophySummary.level,
-      trophies: {
-        bronze: trophiesData.bronze,
-        silver: trophiesData.silver,
-        gold: trophiesData.gold,
-        platinum: trophiesData.platinum,
-      },
-      lastPlayedGame: recentGamesData[0] ? {
-        name: recentGamesData[0].name,
-        imageUrl: recentGamesData[0].imageUrl,
-        trophyProgress: recentGamesData[0].progress,
-      } : null,
-    };
-
-    return new Response(JSON.stringify(psnData), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    return new Response(
+      JSON.stringify({
+        profile: {
+          onlineId: userData.socialMetadata.onlineId,
+          avatarUrl: userData.socialMetadata.avatarUrl,
+        },
+        trophies: earnedCounts,
+        lastPlayedGame: lastPlayedGame
+          ? {
+              name: lastPlayedGame.trophyTitleName,
+              imageUrl: lastPlayedGame.trophyTitleIconUrl,
+              progress: lastPlayedGame.earnedTrophies.progress, 
+            }
+          : null,
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (error) {
-    console.error("Error fetching PSN data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch PSN data" }), {
+    console.error("Error fetching data:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: { "Content-Type": "application/json" },
     });
   }
 };
