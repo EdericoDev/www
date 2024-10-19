@@ -8,7 +8,7 @@
 
   onMount(async () => {
     try {
-      const rawResponse = await fetch("/api/psn.json");
+      const rawResponse = await fetch("/api/psnauth");
       if (!rawResponse.ok) throw new Error(`HTTP error! status: ${rawResponse.status}`);
 
       data = await rawResponse.json();
