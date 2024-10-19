@@ -46,7 +46,6 @@
               <img src={data.lastPlayedGame.imageUrl} class="w-12 h-12 object-cover rounded" alt={data.lastPlayedGame.name} />
               <div>
                 <p class="text-sm text-zinc-800 dark:text-zinc-200">{data.lastPlayedGame.name}</p>
-                <p class="text-xs text-zinc-600 dark:text-zinc-400">Trophy Progress: {data.lastPlayedGame.progress}%</p>
               </div>
             </div>
           </div>

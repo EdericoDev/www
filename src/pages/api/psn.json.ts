@@ -55,7 +55,6 @@ export const GET: APIRoute = async () => {
           ? {
               name: lastPlayedGame.trophyTitleName,
               imageUrl: lastPlayedGame.trophyTitleIconUrl,
-              progress: lastPlayedGame.earnedTrophies.progress, 
             }
           : null,
       }),
