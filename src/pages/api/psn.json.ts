@@ -1,71 +1,67 @@
 import type { APIRoute } from "astro";
-import {
-  exchangeCodeForAccessToken,
-  exchangeNpssoForCode,
-  getUserTitles,
-  getUserTrophiesEarnedForTitle,
-  makeUniversalSearch,
-} from "psn-api";
+import * as psn from 'psn-api';
+import { getValidAccessToken } from '../api/psnauth';
 
-let authorization = null;
-
-const PSN_USERNAME = process.env.PSN_USERNAME;
-
-async function authenticate() {
-  if (!authorization || isAccessTokenExpired()) {
-    const npsso = process.env.NPSSO;
-    const accessCode = await exchangeNpssoForCode(npsso);
-    authorization = await exchangeCodeForAccessToken(accessCode);
-  }
-}
-
-const isAccessTokenExpired = () => {
-  const now = new Date();
-  return new Date(now.getTime() + authorization.expiresIn * 1000).getTime() < now.getTime();
+export type PSNGame = {
+  iconUrl: string;
+  platform: string;
+  name: string;
+  progress: number;
+  lastPlayed: number;
 };
 
-export const GET: APIRoute = async () => {
+export type PSNResponse = {
+  recentlyPlayedGames: PSNGame[];
+};
+
+export const GET: APIRoute = async ({ params, request }) => {
   try {
-    await authenticate();
-    
-    const searchResults = await makeUniversalSearch(authorization, (PSN_USERNAME), "SocialAllAccounts");
-    const accountId = searchResults.domainResponses[0].results[0].socialMetadata.accountId;
-    const userData = searchResults.domainResponses[0].results[0];
+    const accessToken = await getValidAccessToken();
 
-    const { trophyTitles } = await getUserTitles(authorization, accountId);
-    const lastPlayedGame = trophyTitles[0]; 
-
-    const earnedCounts = trophyTitles.reduce(
-      (acc, title) => ({
-        platinum: acc.platinum + title.earnedTrophies.platinum,
-        gold: acc.gold + title.earnedTrophies.gold,
-        silver: acc.silver + title.earnedTrophies.silver,
-        bronze: acc.bronze + title.earnedTrophies.bronze,
-      }),
-      { platinum: 0, gold: 0, silver: 0, bronze: 0 }
+    const { data: { gameLibraryTitlesRetrieve: recentlyPlayedGames } } = await psn.getRecentlyPlayedGames(
+      { accessToken }
     );
 
-    return new Response(
-      JSON.stringify({
-        profile: {
-          onlineId: userData.socialMetadata.onlineId,
-          avatarUrl: userData.socialMetadata.avatarUrl,
-        },
-        trophies: earnedCounts,
-        lastPlayedGame: lastPlayedGame
-          ? {
-              name: lastPlayedGame.trophyTitleName,
-              imageUrl: lastPlayedGame.trophyTitleIconUrl,
-            }
-          : null,
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+    const trophies = await psn.getUserTitles(
+      { accessToken },
+      'me'
     );
+
+    const psnData: PSNResponse = {
+      recentlyPlayedGames: recentlyPlayedGames.games
+        .filter(g => g.platform !== 'UNKNOWN')
+        .slice(0, 5)
+        .map(game => {
+          const trophiesForGame = trophies.trophyTitles.find(t => game.name.includes(t.trophyTitleName));
+          let progress = 0;
+          if (trophiesForGame) {
+            const totalTrophies = Object.values(trophiesForGame.definedTrophies).reduce((total, current) => total + current, 0);
+            const earnedTrophies = Object.values(trophiesForGame.earnedTrophies).reduce((total, current) => total + current, 0);
+            progress = Math.round((earnedTrophies / totalTrophies) * 100);
+          }
+          return {
+            iconUrl: game.image.url,
+            platform: game.platform,
+            name: game.name,
+            progress,
+            lastPlayed: new Date(game.lastPlayedDateTime).getTime()
+          };
+        })
+    };
+
+    return new Response(JSON.stringify(psnData), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
   } catch (error) {
-    console.error("Error fetching data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+    console.error("Error fetching PSN data:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch PSN data" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
   }
 };
