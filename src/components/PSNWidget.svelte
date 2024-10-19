@@ -1,13 +1,14 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import type { PSNResponse } from "../pages/api/psn.json";
 
-  let data = null;
+  let data: PSNResponse | null = null;
   let isLoading = true;
 
   onMount(async () => {
     try {
-      const rawResponse = await fetch("../pages/api/psn.json.ts");
+      const rawResponse = await fetch("/api/psn.json");
       if (!rawResponse.ok) throw new Error(`HTTP error! status: ${rawResponse.status}`);
 
       data = await rawResponse.json();
@@ -60,5 +61,13 @@
   }
   .animate-pulse-fast {
     animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>
