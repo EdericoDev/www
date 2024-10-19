@@ -22,7 +22,7 @@ interface PSNResponse {
   username: string;
 }
 
-async function getAccessToken(): Promise<psn.AuthorizationPayload> {
+async function getAccessToken(): Promise<any> {
   const PSN_NPSSO_TOKEN = env.get('PSN_NPSSO_TOKEN').required().asString();
   try {
     console.log('Exchanging NPSSO for access code');

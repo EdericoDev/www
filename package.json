@@ -21,11 +21,15 @@
     "env-var": "^7.5.0",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
-    "psn-api": "^2.10.1",
-    "svelte": "^4.2.19"
+    "psn-api": "^2.10.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
     "tailwindcss": "^3.4.13"
+  },
+  "overrides": {
+    "psn-api": {
+      "type": "commonjs"
+    }
   }
 }
