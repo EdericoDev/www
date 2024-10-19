@@ -1,6 +1,6 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
-    import type { PSNResponse } from "../pages/api/psn";
+    import type { PSNResponse } from "../pages/api/psn.json";
     import { onMount } from "svelte";
   
     let data: PSNResponse | undefined = undefined;
