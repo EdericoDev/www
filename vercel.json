@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/*.ts": {
+    "api/psn.json.ts": {
       "includeFiles": ["node_modules/**"]
     }
   }
