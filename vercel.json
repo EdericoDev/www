@@ -3,13 +3,24 @@
     "builds": [
       {
         "src": "package.json",
-        "use": "@vercel/node",
-        "config": { "nodeVersion": "20.x" }
+        "use": "@vercel/static-build",
+        "config": {
+          "buildCommand": "npm run build",
+          "outputDirectory": "dist"
+        }
       }
     ],
     "routes": [
-      { "handle": "filesystem" },
-      { "src": "/api/(.*)", "dest": "/api/$1" },
-      { "src": "/(.*)", "dest": "/$1" }
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      },
+      {
+        "handle": "filesystem"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
     ]
   }
