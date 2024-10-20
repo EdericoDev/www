@@ -1,7 +1,13 @@
 {
-  "functions": {
-    "api/*.ts": {
-      "runtime": "nodejs@20.x"
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "astro",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "functions": {
+      "api/*.js": {
+        "runtime": "nodejs@20.x"
+      }
     }
   }
-}
+  
