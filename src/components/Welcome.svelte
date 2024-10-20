@@ -58,6 +58,7 @@
     transform-origin: 70% 70%;
     display: inline-block;
     animation-delay: 0.5s;
+    font-size: 1.5rem;
   }
 
   @keyframes wave-animation {
@@ -85,13 +86,18 @@
   }
 
   .gradient-text {
-  background: linear-gradient(90deg, #ff5f57, #ffbb33, #34c759, #5856d6);
+    background: linear-gradient(90deg, #ff5f57, #ffbb33, #34c759, #5856d6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
 
-  -webkit-background-clip: text; 
-  background-clip: text;         
-
-  -webkit-text-fill-color: transparent; 
-  font-size: 2.5rem;
-  font-weight: bold;
-}
+  .wave {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    color: inherit; 
+  }
 </style>
