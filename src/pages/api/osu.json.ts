@@ -100,9 +100,19 @@ export const GET: APIRoute = async ({ params, request }) => {
         "Content-Type": "application/json"
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching osu! data:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch osu! data", details: error.message }), {
+
+    let errorMessage = "Failed to fetch osu! data";
+    let errorDetails = "An unknown error occurred";
+
+    if (error instanceof Error) {
+      errorDetails = error.message;
+    } else if (typeof error === "string") {
+      errorDetails = error;
+    }
+
+    return new Response(JSON.stringify({ error: errorMessage, details: errorDetails }), {
       status: 500,
       headers: {
         "Content-Type": "application/json"
@@ -110,4 +120,3 @@ export const GET: APIRoute = async ({ params, request }) => {
     });
   }
 };
-

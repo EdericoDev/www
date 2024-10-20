@@ -87,14 +87,14 @@ export const get: APIRoute = async ({ request }) => {
     const { profile } = await getProfileFromUserName(authorization, 'me');
 
     const lastPlayedGame = recentlyPlayedGames.games
-      .filter(g => g.platform !== 'UNKNOWN')
+      .filter((g: { platform: string; }) => g.platform !== 'UNKNOWN')
       [0];
 
     if (!lastPlayedGame) {
       throw new Error('No valid recently played games found');
     }
 
-    const trophiesForGame = trophies.trophyTitles.find(t => lastPlayedGame.name.includes(t.trophyTitleName));
+    const trophiesForGame = trophies.trophyTitles.find((t: { trophyTitleName: any; }) => lastPlayedGame.name.includes(t.trophyTitleName));
 
     let progress = 0;
      if (trophiesForGame) {
@@ -107,7 +107,7 @@ export const get: APIRoute = async ({ request }) => {
     progress = Math.round((earnedTrophies / totalTrophies) * 100);
 }
 
-const totalTrophies = trophies.trophyTitles.reduce((acc, title) => {
+const totalTrophies = trophies.trophyTitles.reduce((acc: { [x: string]: number; }, title: { earnedTrophies: { [s: string]: unknown; } | ArrayLike<unknown>; }) => {
   Object.entries(title.earnedTrophies).forEach(([type, count]) => {
     acc[type as keyof TrophyCounts] += count as number;
   });
