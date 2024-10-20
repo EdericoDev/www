@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { onMount } from "svelte";
 
   let ready = false;
@@ -43,7 +42,7 @@
 </script>
 
 {#if ready}
-<h1>
+<h1 class="gradient-text">
   {displayText}
   <span class="wave">👋</span>
 </h1>
@@ -52,37 +51,47 @@
 {/if}
 
 <style>
-.wave {
-  animation-name: wave-animation;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  transform-origin: 70% 70%;
-  display: inline-block;
-  animation-delay: 0.5s;
-}
+  .wave {
+    animation-name: wave-animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
+    animation-delay: 0.5s;
+  }
 
-@keyframes wave-animation {
-  0%,
-  100% {
-    transform: rotate(0deg);
+  @keyframes wave-animation {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    10% {
+      transform: rotate(14deg);
+    }
+    20% {
+      transform: rotate(-8deg);
+    }
+    30% {
+      transform: rotate(14deg);
+    }
+    40% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    60% {
+      transform: rotate(0deg);
+    }
   }
-  10% {
-    transform: rotate(14deg);
-  }
-  20% {
-    transform: rotate(-8deg);
-  }
-  30% {
-    transform: rotate(14deg);
-  }
-  40% {
-    transform: rotate(-4deg);
-  }
-  50% {
-    transform: rotate(10deg);
-  }
-  60% {
-    transform: rotate(0deg);
-  }
+
+  .gradient-text {
+  background: linear-gradient(90deg, #ff5f57, #ffbb33, #34c759, #5856d6);
+
+  -webkit-background-clip: text; 
+  background-clip: text;         
+
+  -webkit-text-fill-color: transparent; 
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 </style>
