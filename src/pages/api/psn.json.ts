@@ -1,26 +1,35 @@
 import type { APIRoute } from 'astro';
+import { z } from 'zod';
+import { VercelKV as Redis } from '@vercel/kv';
 
-const npsso = import.meta.env.PSN_NPSSO; 
-const psnUsername = import.meta.env.PSN_USERNAME; 
+const psnApi = await import('psn-api');
 
-async function getAccessToken(psnApi: any) {
+const redis = new Redis({
+  url: import.meta.env.KV_REST_API_URL,
+  token: import.meta.env.KV_REST_API_TOKEN,
+});
+
+const npsso = import.meta.env.PSN_NPSSO;
+const psnUsername = import.meta.env.PSN_USERNAME;
+
+async function getAccessToken() {
   const { exchangeNpssoForCode, exchangeCodeForAccessToken } = psnApi;
   const accessCode = await exchangeNpssoForCode(npsso);
   const accessTokenResponse = await exchangeCodeForAccessToken(accessCode);
   return accessTokenResponse;
 }
 
-async function getUserData(psnApi: any, authPayload: any) {
+async function getUserData(authPayload: any) {
   const { getProfileFromUserName } = psnApi;
   return await getProfileFromUserName(authPayload, psnUsername);
 }
 
-async function getLastPlayedGame(psnApi: any, authPayload: any) {
+async function getLastPlayedGame(authPayload: any) {
   const { getUserTitles } = psnApi;
   const userTitles = await getUserTitles(authPayload, psnUsername);
 
   if (userTitles.trophyTitles && userTitles.trophyTitles.length > 0) {
-    const lastGame = userTitles.trophyTitles[0]; 
+    const lastGame = userTitles.trophyTitles[0];
     return {
       title: lastGame.trophyTitleName,
       progress: lastGame.earnedTrophies.platinum + lastGame.earnedTrophies.gold + lastGame.earnedTrophies.silver + lastGame.earnedTrophies.bronze,
@@ -47,22 +56,14 @@ export type PsnResponse = {
   } | null;
 };
 
-export const GET: APIRoute = async ({ params, request }) => {
+const getPsnStatus = async (): Promise<PsnResponse> => {
   try {
-    const psnApi = await import('psn-api');
-
-    const authPayload = await getAccessToken(psnApi);
-    console.log('Authorization Payload:', authPayload);
-
-    const userData = await getUserData(psnApi, authPayload);
-    console.log('User Data:', userData);
-
+    const authPayload = await getAccessToken();
+    const userData = await getUserData(authPayload);
     const avatarUrl = userData.profile.avatarUrls.find((avatar: any) => avatar.size === 'm')?.avatarUrl || '';
+    const lastPlayedGame = await getLastPlayedGame(authPayload);
 
-    const lastPlayedGame = await getLastPlayedGame(psnApi, authPayload);
-    console.log('Last Played Game:', lastPlayedGame);
-
-    const psnData: PsnResponse = {
+    return {
       accountId: userData.profile.accountId,
       username: userData.profile.onlineId,
       avatarUrl,
@@ -74,15 +75,40 @@ export const GET: APIRoute = async ({ params, request }) => {
       },
       lastPlayedGame,
     };
+  } catch (error) {
+    console.error('Error fetching PSN data:', error);
+    throw error;
+  }
+};
 
-    return new Response(JSON.stringify(psnData), {
+export const POST: APIRoute = async ({ request }) => {
+  try {
+    const psnCache = await redis.get('psn-cache').catch((err) => {
+      console.error(err);
+    });
+
+    if (psnCache) {
+      return new Response(JSON.stringify(psnCache), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    const psnStatus = await getPsnStatus();
+    await redis.setex('psn-cache', 300, psnStatus).catch((err) => {
+      console.error(err);
+    });
+
+    return new Response(JSON.stringify(psnStatus), {
       status: 200,
       headers: {
         'Content-Type': 'application/json'
       }
     });
   } catch (error: unknown) {
-    console.error('Error fetching PSN data:', error);
+    console.error('Error in PSN API:', error);
 
     let errorMessage = 'Failed to fetch PSN data';
     let errorDetails = 'An unknown error occurred';

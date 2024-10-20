@@ -1,129 +1,116 @@
-import type { APIRoute } from 'astro';
-import { z } from 'zod';
-import { VercelKV as Redis } from '@vercel/kv';
+import type { APIRoute } from "astro";
 
-// Dynamically import psn-api
-const psnApi = await import('psn-api');
+const OSU_API_URL = "https://osu.ppy.sh/api/v2";
+const OSU_TOKEN_URL = "https://osu.ppy.sh/oauth/token";
 
-const redis = new Redis({
-  url: import.meta.env.KV_REST_API_URL,
-  token: import.meta.env.KV_REST_API_TOKEN,
-});
-
-const npsso = import.meta.env.PSN_NPSSO;
-const psnUsername = import.meta.env.PSN_USERNAME;
+const clientId = import.meta.env.OSU_CLIENT_ID;
+const clientSecret = import.meta.env.OSU_CLIENT_SECRET;
+const userId = import.meta.env.OSU_USER_ID;
 
 async function getAccessToken() {
-  const { exchangeNpssoForCode, exchangeCodeForAccessToken } = psnApi;
-  const accessCode = await exchangeNpssoForCode(npsso);
-  const accessTokenResponse = await exchangeCodeForAccessToken(accessCode);
-  return accessTokenResponse;
+  const response = await fetch(OSU_TOKEN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: "client_credentials",
+      scope: "public",
+    }),
+  });
+  const data = await response.json();
+  return data.access_token;
 }
 
-async function getUserData(authPayload: any) {
-  const { getProfileFromUserName } = psnApi;
-  return await getProfileFromUserName(authPayload, psnUsername);
+async function getUserData(accessToken: string) {
+  const response = await fetch(`${OSU_API_URL}/users/${userId}/osu`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.json();
 }
 
-async function getLastPlayedGame(authPayload: any) {
-  const { getUserTitles } = psnApi;
-  const userTitles = await getUserTitles(authPayload, psnUsername);
+async function getRecentActivity(accessToken: string) {
+  const response = await fetch(`${OSU_API_URL}/users/${userId}/scores/recent?limit=1`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-  if (userTitles.trophyTitles && userTitles.trophyTitles.length > 0) {
-    const lastGame = userTitles.trophyTitles[0];
-    return {
-      title: lastGame.trophyTitleName,
-      progress: lastGame.earnedTrophies.platinum + lastGame.earnedTrophies.gold + lastGame.earnedTrophies.silver + lastGame.earnedTrophies.bronze,
-      iconUrl: lastGame.trophyTitleIconUrl
-    };
-  }
-  return null;
+  return response.json();
 }
 
-export type PsnResponse = {
-  accountId: string;
+export type OsuResponse = {
+  userId: string;
   username: string;
   avatarUrl: string;
-  trophies: {
-    platinum: number;
-    gold: number;
-    silver: number;
-    bronze: number;
-  };
-  lastPlayedGame: {
-    title: string;
-    progress: number;
-    iconUrl: string;
+  globalRank: number | null;
+  countryRank: number | null;
+  pp: number | null;
+  accuracy: number | null;
+  lastPlayed: {
+    beatmapTitle: string;
+    beatmapUrl: string;
+    score: number;
+    accuracy: number;
+    rank: string;
+    difficulty: string;
+    starRating: number;
   } | null;
 };
 
-const getPsnStatus = async (): Promise<PsnResponse> => {
+export const GET: APIRoute = async ({ params, request }) => {
   try {
-    const authPayload = await getAccessToken();
-    const userData = await getUserData(authPayload);
-    const avatarUrl = userData.profile.avatarUrls.find((avatar: any) => avatar.size === 'm')?.avatarUrl || '';
-    const lastPlayedGame = await getLastPlayedGame(authPayload);
-
-    return {
-      accountId: userData.profile.accountId,
-      username: userData.profile.onlineId,
-      avatarUrl,
-      trophies: {
-        platinum: userData.profile.trophySummary.earnedTrophies.platinum,
-        gold: userData.profile.trophySummary.earnedTrophies.gold,
-        silver: userData.profile.trophySummary.earnedTrophies.silver,
-        bronze: userData.profile.trophySummary.earnedTrophies.bronze,
-      },
-      lastPlayedGame,
+    const accessToken = await getAccessToken();
+    console.log("Access Token:", accessToken);
+    const userData = await getUserData(accessToken);
+    console.log("User Data:", userData);
+    const recentActivity = await getRecentActivity(accessToken);
+    console.log("Recent Activity:", recentActivity);
+    const osuData: OsuResponse = {
+      userId: userData.id,
+      username: userData.username,
+      avatarUrl: userData.avatar_url,
+      globalRank: userData.statistics?.global_rank ?? null,
+      countryRank: userData.statistics?.country_rank ?? null,
+      pp: userData.statistics?.pp ?? null,
+      accuracy: userData.statistics?.hit_accuracy ?? null,
+      lastPlayed: recentActivity[0] ? {
+        beatmapTitle: recentActivity[0].beatmapset?.title ?? 'Unknown',
+        beatmapUrl: `https://osu.ppy.sh/beatmapsets/${recentActivity[0].beatmapset?.id}#osu/${recentActivity[0].beatmap?.id}`,
+        score: recentActivity[0].score ?? 0,
+        accuracy: (recentActivity[0].accuracy ?? 0) * 100,
+        rank: recentActivity[0].rank ?? 'Unknown',
+        difficulty: recentActivity[0].beatmap?.version ?? 'Unknown',
+        starRating: recentActivity[0].beatmap?.difficulty_rating ?? 0,
+      } : null,
     };
-  } catch (error) {
-    console.error('Error fetching PSN data:', error);
-    throw error;
-  }
-};
 
-export const POST: APIRoute = async ({ request }) => {
-  try {
-    const psnCache = await redis.get('psn-cache').catch((err) => {
-      console.error(err);
-    });
-
-    if (psnCache) {
-      return new Response(JSON.stringify(psnCache), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-    }
-
-    const psnStatus = await getPsnStatus();
-    await redis.setex('psn-cache', 300, psnStatus).catch((err) => {
-      console.error(err);
-    });
-
-    return new Response(JSON.stringify(psnStatus), {
+    return new Response(JSON.stringify(osuData), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       }
     });
   } catch (error: unknown) {
-    console.error('Error in PSN API:', error);
+    console.error("Error fetching osu! data:", error);
 
-    let errorMessage = 'Failed to fetch PSN data';
-    let errorDetails = 'An unknown error occurred';
+    let errorMessage = "Failed to fetch osu! data";
+    let errorDetails = "An unknown error occurred";
 
     if (error instanceof Error) {
       errorDetails = error.message;
-    } else if (typeof error === 'string') {
+    } else if (typeof error === "string") {
       errorDetails = error;
     }
 
     return new Response(JSON.stringify({ error: errorMessage, details: errorDetails }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       }
     });
   }
