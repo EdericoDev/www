@@ -33,8 +33,8 @@
   </script>
   
   {#if ready}
-    <h1 class="gradient-text">
-      {displayText}
+    <h1>
+      <span class="gradient-text">{displayText}</span>
       <span class="wave">👋</span>
     </h1>
   {:else}
@@ -51,11 +51,11 @@
     }
   
     .wave {
+      display: inline-block;
       animation-name: wave-animation;
       animation-duration: 2s;
       animation-iteration-count: infinite;
       transform-origin: 70% 70%;
-      display: inline-block;
       animation-delay: 0.5s;
     }
   
