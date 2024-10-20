@@ -13,7 +13,6 @@ import Osu from '../components/Osu.svelte';
 import Links from '../components/Links.astro';
 import Posts from '../components/Posts.astro';
 import Navigation from '../components/SiteLogo.astro';
-import PSNWidget from '../components/PSNWidget.svelte';
 
 <Greeting client:load />
 
@@ -39,9 +38,9 @@ In my free time, I play <Badge type="osu" href="https://osu.ppy.sh/users/3460315
 
 <Osu client:load />
 
-Or sometimes , i use my PS5 for playing absolute masterpieces.
+Or sometimes , i use my <Badge type="playstation" href="https://psnprofiles.com/jxst_ede" label="PS5" /> for playing absolute masterpieces.
 
-<PSNWidget client:load />
+<a href="https://psnprofiles.com/jxst_ede"><img src="https://card.psnprofiles.com/1/jxst_ede.png" border="0"></img></a>
 
 I also listen to pretty much every genre on <Badge type="spotify" href="https://open.spotify.com/user/31w3g2o6tkydwgjzyuntt42gpi54?si=fdeb7fa8d94e45b7" label="spotify" />. Check what I'm into below:
 
