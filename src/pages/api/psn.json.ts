@@ -1,5 +1,8 @@
 import type { APIRoute } from 'astro';
-import { exchangeNpssoForCode, exchangeCodeForAccessToken, getProfileFromUserName, getUserTitles } from 'psn-api';
+import psnApi from 'psn-api';
+
+const { exchangeNpssoForCode, exchangeCodeForAccessToken, getProfileFromUserName, getUserTitles } = psnApi;
+
 
 const npsso = import.meta.env.PSN_NPSSO; 
 const psnUsername = import.meta.env.PSN_USERNAME; 
