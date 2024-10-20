@@ -57,31 +57,26 @@ export type PsnResponse = {
 };
 
 const getPsnStatus = async (): Promise<PsnResponse> => {
-  try {
-    const authPayload = await getAccessToken();
-    const userData = await getUserData(authPayload);
-    const avatarUrl = userData.profile.avatarUrls.find((avatar: any) => avatar.size === 'm')?.avatarUrl || '';
-    const lastPlayedGame = await getLastPlayedGame(authPayload);
+  const authPayload = await getAccessToken();
+  const userData = await getUserData(authPayload);
+  const avatarUrl = userData.profile.avatarUrls.find((avatar: any) => avatar.size === 'm')?.avatarUrl || '';
+  const lastPlayedGame = await getLastPlayedGame(authPayload);
 
-    return {
-      accountId: userData.profile.accountId,
-      username: userData.profile.onlineId,
-      avatarUrl,
-      trophies: {
-        platinum: userData.profile.trophySummary.earnedTrophies.platinum,
-        gold: userData.profile.trophySummary.earnedTrophies.gold,
-        silver: userData.profile.trophySummary.earnedTrophies.silver,
-        bronze: userData.profile.trophySummary.earnedTrophies.bronze,
-      },
-      lastPlayedGame,
-    };
-  } catch (error) {
-    console.error('Error fetching PSN data:', error);
-    throw error;
-  }
+  return {
+    accountId: userData.profile.accountId,
+    username: userData.profile.onlineId,
+    avatarUrl,
+    trophies: {
+      platinum: userData.profile.trophySummary.earnedTrophies.platinum,
+      gold: userData.profile.trophySummary.earnedTrophies.gold,
+      silver: userData.profile.trophySummary.earnedTrophies.silver,
+      bronze: userData.profile.trophySummary.earnedTrophies.bronze,
+    },
+    lastPlayedGame,
+  };
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ params, request }) => {
   try {
     const psnCache = await redis.get('psn-cache').catch((err) => {
       console.error(err);
