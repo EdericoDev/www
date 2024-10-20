@@ -18,7 +18,10 @@
     "astro": "^4.15.11",
     "astro-icon": "^1.1.1",
     "autoprefixer": "^10.4.20",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "env-var": "^7.5.0",
+    "express": "^4.21.1",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "psn-api": "^2.10.1"
