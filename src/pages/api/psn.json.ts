@@ -98,18 +98,22 @@ export const get: APIRoute = async ({ request }) => {
     const trophiesForGame = trophies.trophyTitles.find(t => lastPlayedGame.name.includes(t.trophyTitleName));
 
     let progress = 0;
-    if (trophiesForGame) {
-      const totalTrophies = Object.values(trophiesForGame.definedTrophies).reduce((total, current) => total + current, 0);
-      const earnedTrophies = Object.values(trophiesForGame.earnedTrophies).reduce((total, current) => total + current, 0);
-      progress = Math.round((earnedTrophies / totalTrophies) * 100);
-    }
+     if (trophiesForGame) {
+     const totalTrophies = (Object.values(trophiesForGame.definedTrophies) as number[]).reduce(
+    (total, current) => total + current, 0
+     );
+    const earnedTrophies = (Object.values(trophiesForGame.earnedTrophies) as number[]).reduce(
+    (total, current) => total + current, 0
+     );
+    progress = Math.round((earnedTrophies / totalTrophies) * 100);
+}
 
-    const totalTrophies = trophies.trophyTitles.reduce((acc, title) => {
-      Object.entries(title.earnedTrophies).forEach(([type, count]) => {
-        acc[type as keyof TrophyCounts] += count;
-      });
-      return acc;
-    }, { bronze: 0, silver: 0, gold: 0, platinum: 0 });
+const totalTrophies = trophies.trophyTitles.reduce((acc, title) => {
+  Object.entries(title.earnedTrophies).forEach(([type, count]) => {
+    acc[type as keyof TrophyCounts] += count as number;
+  });
+  return acc;
+}, { bronze: 0, silver: 0, gold: 0, platinum: 0 });
 
     const psnResponse: PSNResponse = {
       trophyCounts: totalTrophies,
