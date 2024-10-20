@@ -1,23 +1,22 @@
 import type { APIRoute } from 'astro';
-import psnApi from 'psn-api';
-
-const { exchangeNpssoForCode, exchangeCodeForAccessToken, getProfileFromUserName, getUserTitles } = psnApi;
-
 
 const npsso = import.meta.env.PSN_NPSSO; 
 const psnUsername = import.meta.env.PSN_USERNAME; 
 
-async function getAccessToken() {
+async function getAccessToken(psnApi: any) {
+  const { exchangeNpssoForCode, exchangeCodeForAccessToken } = psnApi;
   const accessCode = await exchangeNpssoForCode(npsso);
   const accessTokenResponse = await exchangeCodeForAccessToken(accessCode);
   return accessTokenResponse;
 }
 
-async function getUserData(authPayload: any) {
+async function getUserData(psnApi: any, authPayload: any) {
+  const { getProfileFromUserName } = psnApi;
   return await getProfileFromUserName(authPayload, psnUsername);
 }
 
-async function getLastPlayedGame(authPayload: any) {
+async function getLastPlayedGame(psnApi: any, authPayload: any) {
+  const { getUserTitles } = psnApi;
   const userTitles = await getUserTitles(authPayload, psnUsername);
 
   if (userTitles.trophyTitles && userTitles.trophyTitles.length > 0) {
@@ -50,15 +49,17 @@ export type PsnResponse = {
 
 export const GET: APIRoute = async ({ params, request }) => {
   try {
-    const authPayload = await getAccessToken();
+    const psnApi = await import('psn-api');
+
+    const authPayload = await getAccessToken(psnApi);
     console.log('Authorization Payload:', authPayload);
 
-    const userData = await getUserData(authPayload);
+    const userData = await getUserData(psnApi, authPayload);
     console.log('User Data:', userData);
 
     const avatarUrl = userData.profile.avatarUrls.find((avatar: any) => avatar.size === 'm')?.avatarUrl || '';
 
-    const lastPlayedGame = await getLastPlayedGame(authPayload);
+    const lastPlayedGame = await getLastPlayedGame(psnApi, authPayload);
     console.log('Last Played Game:', lastPlayedGame);
 
     const psnData: PsnResponse = {
