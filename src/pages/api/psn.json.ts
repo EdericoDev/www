@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro';
 import env from "env-var";
 
-// Use `require` for psn-api because it's a CommonJS module
 import Module from 'node:module';
 const require = Module.createRequire(import.meta.url);
 const { exchangeNpssoForCode, exchangeCodeForAccessToken, getUserTitles, getRecentlyPlayedGames, getProfileFromUserName } = require('psn-api');

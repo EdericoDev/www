@@ -1,8 +1,9 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
+    import type { PSNResponse } from "../pages/api/psn.json";
     
-    interface PSNData {
+    interface PSNResponse {
       trophyCounts: {
         bronze: number;
         silver: number;
@@ -17,7 +18,7 @@
       username: string;
     }
     
-    let data: PSNData | undefined = undefined;
+    let data: PSNResponse | undefined = undefined;
     let isLoading = true;
     
     const bannerUrl = "/public/img/cyberpunkgif.gif";
