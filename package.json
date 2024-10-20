@@ -31,5 +31,8 @@
     "psn-api": {
       "type": "commonjs"
     }
-  }
+  },
+    "engines": {
+      "node": ">=20.x"
+    }
 }
