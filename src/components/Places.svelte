@@ -8,9 +8,6 @@
   <div class="places-widget">
     <div class="relative w-full not-prose">
       <div class="rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 bg-white dark:bg-zinc-900 shadow-md">
-        <h2 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100 text-center mb-3">
-          Conventions I’ve Attended 📅
-        </h2>
         <ul class="space-y-3">
           {#each places as { name, url }}
             <li class="flex items-center p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all">
