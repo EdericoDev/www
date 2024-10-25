@@ -1,20 +1,34 @@
-<script>
-    const places = [
+<script lang="ts">
+    type Place = { name: string; url: string };
+    let places: Place[] = [
       { name: "Linux Day 2023/2024", url: "https://www.linuxday.it/2024/" },
     ];
   </script>
   
-  <div class="prose mx-auto p-4 md:p-6 rounded-lg bg-gray-50 shadow-sm transition-all hover:shadow-md duration-200">
-    <h2 class="text-gray-800 text-xl font-semibold text-center mb-3">Conventions I’ve Attended 📅</h2>
-    <ul class="space-y-3">
-      {#each places as { name, url }}
-        <li class="flex items-center p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-all">
-          <span class="text-lg mr-3">📍</span>
-          <a href={url} target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline">
-            {name}
-          </a>
-        </li>
-      {/each}
-    </ul>
+  <div class="places-widget">
+    <div class="relative w-full not-prose">
+      <div class="rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 bg-white dark:bg-zinc-900 shadow-md">
+        <h2 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100 text-center mb-3">
+          Conventions I’ve Attended 📅
+        </h2>
+        <ul class="space-y-3">
+          {#each places as { name, url }}
+            <li class="flex items-center p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all">
+              <span class="text-lg mr-3">📍</span>
+              <a href={url} target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline">
+                {name}
+              </a>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    </div>
   </div>
+  
+  <style>
+    .places-widget {
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+  </style>
   
