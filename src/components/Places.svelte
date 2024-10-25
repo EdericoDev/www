@@ -11,7 +11,7 @@
       { 
         name: "Linux Day 2023/2024", 
         url: "https://www.linuxday.it/2024/",
-      },
+      }
     ];
   </script>
   
