@@ -12,7 +12,7 @@
           {#each places as { name, url }}
             <li class="flex items-center p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all">
               <span class="text-lg mr-3">📍</span>
-              <a href={url} target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline">
+              <a href={url} target="_blank" rel="noopener noreferrer" class="text-zinc-800 dark:text-zinc-100 font-medium hover:underline">
                 {name}
               </a>
             </li>
