@@ -17,12 +17,12 @@ const navigation: NavItem[] = [
   {
     path: '/',
     label: 'Home',
-    icon: 'mdi:home'
+    icon: 'arch'
   },
   {
     path: '/blog',
     label: 'Blog',
-    icon: 'mdi:post'
+    icon: 'obsidian'
   }
 ];
 
@@ -30,7 +30,7 @@ const socialLinks: SocialLink[] = [
   {
     platform: 'GitHub',
     url: 'https://github.com/EdericoDev',
-    icon: 'mdi:github'
+    icon: 'ph:github-logo-bold'
   },
 ];
 
@@ -80,7 +80,7 @@ const currentPath = Astro.url.pathname;
           >
             <Icon name={icon} class="w-6 h-6" />
             <span class="font-medium">{platform}</span>
-            <Icon name="mdi:open-in-new" class="w-4 h-4 ml-auto opacity-70" />
+            <Icon name="ph:arrow-square-out-bold" class="w-4 h-4 ml-auto opacity-70" />
           </a>
         ))}
       </div>
@@ -94,7 +94,7 @@ const currentPath = Astro.url.pathname;
   class="fixed top-4 left-4 z-50 md:hidden bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg transition-colors duration-200"
   aria-label="Toggle Sidebar"
 >
-  <Icon name="mdi:menu" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
+  <Icon name="ph:list-bold" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
 </button>
 
 <script>
