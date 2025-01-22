@@ -1,0 +1,132 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+}
+
+interface SocialLink {
+  platform: string;
+  url: string;
+  icon: string;
+}
+
+const navigation: NavItem[] = [
+  {
+    path: '/',
+    label: 'Home',
+    icon: 'mdi:home'
+  },
+  {
+    path: '/blog',
+    label: 'Blog',
+    icon: 'mdi:post'
+  }
+];
+
+const socialLinks: SocialLink[] = [
+  {
+    platform: 'GitHub',
+    url: 'https://github.com/EdericoDev',
+    icon: 'mdi:github'
+  },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<div id="site-navigation" class="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-200 ease-in-out md:translate-x-0 -translate-x-full">
+  <div class="flex flex-col h-full p-4">
+    <!-- Profile Section -->
+    <div class="text-center mb-8">
+      <img 
+        src="/your-profile-image.jpg" 
+        alt="Profile" 
+        class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-gray-200 dark:border-gray-700"
+      >
+      <h1 class="text-xl font-bold dark:text-white">Ederico Dev</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">Web Developer</p>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="space-y-2">
+      {navigation.map(({ path, label, icon }) => (
+        <a 
+          href={path}
+          class={`flex items-center space-x-2 p-2 rounded-lg transition-colors duration-200 ${
+            currentPath === path 
+              ? 'bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400' 
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+          }`}
+        >
+          <Icon name={icon} class="w-6 h-6" />
+          <span class="font-medium">{label}</span>
+        </a>
+      ))}
+    </nav>
+
+    <!-- Social Links -->
+    <div class="mt-auto pt-8 border-t border-gray-200 dark:border-gray-700">
+      <h2 class="text-sm font-semibold mb-4 text-gray-600 dark:text-gray-400 uppercase tracking-wider">Connect</h2>
+      <div class="space-y-2">
+        {socialLinks.map(({ platform, url, icon }) => (
+          <a 
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center space-x-2 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            <Icon name={icon} class="w-6 h-6" />
+            <span class="font-medium">{platform}</span>
+            <Icon name="mdi:open-in-new" class="w-4 h-4 ml-auto opacity-70" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Toggle -->
+<button 
+  id="sidebar-toggle"
+  class="fixed top-4 left-4 z-50 md:hidden bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg transition-colors duration-200"
+  aria-label="Toggle Sidebar"
+>
+  <Icon name="mdi:menu" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
+</button>
+
+<script>
+  const toggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('site-navigation');
+  const mediaQuery = window.matchMedia('(min-width: 768px)');
+
+  function handleSidebar() {
+    if (mediaQuery.matches) {
+      sidebar?.classList.remove('-translate-x-full');
+    } else {
+      sidebar?.classList.add('-translate-x-full');
+    }
+  }
+
+  handleSidebar();
+
+  toggle?.addEventListener('click', () => {
+    sidebar?.classList.toggle('-translate-x-full');
+  });
+
+  mediaQuery.addEventListener('change', handleSidebar);
+
+  document.addEventListener('click', (e) => {
+    if (
+      !mediaQuery.matches && 
+      sidebar && 
+      toggle && 
+      !sidebar.contains(e.target as Node) && 
+      !toggle.contains(e.target as Node)
+    ) {
+      sidebar.classList.add('-translate-x-full');
+    }
+  });
+</script>
