@@ -1,4 +1,4 @@
-export { r as renderers } from '../../chunks/_@astro-renderers_CUAdK9-4.mjs';
+export { r as renderers } from '../../chunks/_@astro-renderers_CNUOuFo5.mjs';
 
 const OSU_API_URL = "https://osu.ppy.sh/api/v2";
 const OSU_TOKEN_URL = "https://osu.ppy.sh/oauth/token";

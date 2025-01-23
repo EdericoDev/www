@@ -397,7 +397,7 @@ function createComponent(arg1, moduleId, propagation) {
   }
 }
 
-const ASTRO_VERSION = "5.1.8";
+const ASTRO_VERSION = "5.1.9";
 const REROUTE_DIRECTIVE_HEADER = "X-Astro-Reroute";
 const REWRITE_DIRECTIVE_HEADER_KEY = "X-Astro-Rewrite";
 const REWRITE_DIRECTIVE_HEADER_VALUE = "yes";
@@ -1681,8 +1681,12 @@ const internalProps = /* @__PURE__ */ new Set([
 function containsServerDirective(props) {
   return "server:component-directive" in props;
 }
+const SCRIPT_RE = /<\/script/giu;
+const COMMENT_RE = /<!--/gu;
+const SCRIPT_REPLACER = "<\\/script";
+const COMMENT_REPLACER = "\\u003C!--";
 function safeJsonStringify(obj) {
-  return JSON.stringify(obj).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029").replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/\//g, "\\u002f");
+  return JSON.stringify(obj).replace(SCRIPT_RE, SCRIPT_REPLACER).replace(COMMENT_RE, COMMENT_REPLACER);
 }
 function createSearchParams(componentExport, encryptedProps, slots) {
   const params = new URLSearchParams();
