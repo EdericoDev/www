@@ -22,6 +22,8 @@
     "dotenv": "^16.4.5",
     "env-var": "^7.5.0",
     "express": "^4.21.1",
+    "glob": "^11.0.1",
+    "lru-cache": "^11.0.2",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "psn-api": "^2.10.1",
