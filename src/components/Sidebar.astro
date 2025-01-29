@@ -1,0 +1,48 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<script>
+  const menuButton = document.querySelector('[data-menu-button]');
+  const darkModeButton = document.querySelector('[data-dark-mode-button]');
+  const nav = document.querySelector('nav');
+
+  menuButton?.addEventListener('click', () => {
+    nav?.classList.toggle('-translate-x-full');
+  });
+
+  darkModeButton?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>
+
+<button
+  data-menu-button
+  aria-label="Toggle menu"
+  type="button"
+  class="fixed top-4 left-4 z-50 md:hidden bg-zinc-800 dark:bg-white p-2 rounded-lg text-white dark:text-black"
+>
+  <Icon name="mdi:menu" class="w-6 h-6" />
+</button>
+
+<button
+  data-dark-mode-button
+  aria-label="Toggle dark mode"
+  type="button"
+  class="fixed top-4 right-4 z-50 bg-zinc-800 dark:bg-white p-2 rounded-lg text-white dark:text-black"
+>
+  <Icon name="mdi:weather-night" class="w-6 h-6" />
+</button>
+
+<nav class="fixed left-0 top-0 h-full w-64 bg-black dark:bg-white p-8 border-r border-zinc-800 dark:border-zinc-200 shadow-xl transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 z-40">
+  <div class="flex flex-col space-y-6">
+    <a href="/" class="flex items-center space-x-3 text-zinc-400 hover:text-white transition-colors">
+      <Icon name="mdi:home" class="w-5 h-5" />
+      <span>Home</span>
+    </a>
+    <a href="/blog" class="flex items-center space-x-3 text-zinc-400 hover:text-white transition-colors">
+      <Icon name="mdi:file-document" class="w-5 h-5" />
+      <span>Blog</span>
+    </a>
+  </div>
+</nav>
