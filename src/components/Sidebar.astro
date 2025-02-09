@@ -1,48 +1,80 @@
 ---
 import { Icon } from 'astro-icon/components';
+import SiteLogo from './SiteLogo.astro';
+import SearchBar from './SearchBar.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('myblog');
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+const latestPost = sortedPosts[0];
+
+const links = [
+  { href: "/", icon: "mdi:home", text: "Home" },
+  { href: `/myblog/${latestPost.slug}`, icon: "mdi:file-document", text: "Posts", id: "posts-trigger" }
+];
+
+const projects = [
+  { href: "#", icon: "mdi:code-braces", text: "Project Alpha" },
+  { href: "#", icon: "mdi:chart-line", text: "Data Visualizer" }
+];
+
+const social = [
+  { href: "https://github.com/yourusername", icon: "mdi:github", text: "GitHub" },
+  { href: "https://twitter.com/yourusername", icon: "mdi:twitter", text: "Twitter" }
+];
 ---
 
-<script>
-  const menuButton = document.querySelector('[data-menu-button]');
-  const darkModeButton = document.querySelector('[data-dark-mode-button]');
-  const nav = document.querySelector('nav');
+<div class="hidden md:block fixed left-0 top-0 h-full w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 z-40">
+  <div class="p-8">
+    <div class="mb-8">
+      <SiteLogo />
+    </div>
 
-  menuButton?.addEventListener('click', () => {
-    nav?.classList.toggle('-translate-x-full');
-  });
+    <div class="space-y-4">
+      {links.map(link => (
+        <a 
+          href={link.href} 
+          id={link.id}
+          class="flex items-center gap-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400"
+        >
+          <Icon name={link.icon} class="w-5 h-5" />
+          <span>{link.text}</span>
+        </a>
+      ))}
 
-  darkModeButton?.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-  });
-</script>
+      <button 
+        data-dark-mode-button
+        class="w-full flex items-center gap-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400"
+      >
+        <Icon name="mdi:weather-night" class="w-5 h-5" />
+        <span>Dark Mode</span>
+      </button>
+    </div>
 
-<button
-  data-menu-button
-  aria-label="Toggle menu"
-  type="button"
-  class="fixed top-4 left-4 z-50 md:hidden bg-zinc-800 dark:bg-white p-2 rounded-lg text-white dark:text-black"
->
-  <Icon name="mdi:menu" class="w-6 h-6" />
-</button>
+    <div class="mt-8">
+      <SearchBar />
+    </div>
 
-<button
-  data-dark-mode-button
-  aria-label="Toggle dark mode"
-  type="button"
-  class="fixed top-4 right-4 z-50 bg-zinc-800 dark:bg-white p-2 rounded-lg text-white dark:text-black"
->
-  <Icon name="mdi:weather-night" class="w-6 h-6" />
-</button>
+    <h2 class="text-lg font-semibold mt-8 mb-4 dark:text-white">Projects</h2>
+    <div class="space-y-2">
+      {projects.map(project => (
+        <a href={project.href} class="flex items-center gap-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400">
+          <Icon name={project.icon} class="w-5 h-5" />
+          <span>{project.text}</span>
+        </a>
+      ))}
+    </div>
 
-<nav class="fixed left-0 top-0 h-full w-64 bg-black dark:bg-white p-8 border-r border-zinc-800 dark:border-zinc-200 shadow-xl transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 z-40">
-  <div class="flex flex-col space-y-6">
-    <a href="/" class="flex items-center space-x-3 text-zinc-400 hover:text-white transition-colors">
-      <Icon name="mdi:home" class="w-5 h-5" />
-      <span>Home</span>
-    </a>
-    <a href="/blog" class="flex items-center space-x-3 text-zinc-400 hover:text-white transition-colors">
-      <Icon name="mdi:file-document" class="w-5 h-5" />
-      <span>Blog</span>
-    </a>
+    <h2 class="text-lg font-semibold mt-8 mb-4 dark:text-white">Online</h2>
+    <div class="space-y-2">
+      {social.map(link => (
+        <a href={link.href} class="flex items-center gap-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-400" target="_blank">
+          <Icon name={link.icon} class="w-5 h-5" />
+          <span>{link.text}</span>
+        </a>
+      ))}
+    </div>
   </div>
-</nav>
+</div>

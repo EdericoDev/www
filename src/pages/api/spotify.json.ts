@@ -133,28 +133,19 @@ const getSpotifyStatus = async (): Promise<SpotifyResponse> => {
 };
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const spotifyCache = await redis.get("spotify-cache").catch((err) => {
-    console.error(err);
-  });
-
-  if (spotifyCache) {
-    return new Response(JSON.stringify(spotifyCache), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-  }
-
   const spotifyStatus = await getSpotifyStatus();
-  await redis.setex("spotify-cache", 30, spotifyStatus).catch((err) => {
+  
+  await redis.set("last-spotify-song", spotifyStatus).catch((err) => {
     console.error(err);
   });
 
   return new Response(JSON.stringify(spotifyStatus), {
     status: 200,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
     }
   });
 };

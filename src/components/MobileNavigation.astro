@@ -1,0 +1,27 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('myblog');
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+const latestPost = sortedPosts[0];
+---
+
+<div class="fixed md:hidden bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 z-50">
+  <div class="flex justify-around p-4">
+    <a href="/" class="flex flex-col items-center text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-500">
+      <Icon name="mdi:home" class="w-6 h-6" />
+      <span class="text-xs mt-1">Home</span>
+    </a>
+    
+    <a 
+      href={`/myblog/${latestPost.slug}`}
+      class="flex flex-col items-center text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-blue-500"
+    >
+      <Icon name="mdi:file-document" class="w-6 h-6" />
+      <span class="text-xs mt-1">Posts</span>
+    </a>
+  </div>
+</div>

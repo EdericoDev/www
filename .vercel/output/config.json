@@ -28,7 +28,11 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^\\/blog\\/videogames\\/?$",
+			"src": "^\\/myblog\\/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^\\/myblog(?:\\/(.*?))?\\/?$",
 			"dest": "_render"
 		},
 		{

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import querystring from 'node:querystring';
 import { VercelKV } from '@vercel/kv';
-export { r as renderers } from '../../chunks/_@astro-renderers_CNUOuFo5.mjs';
+export { r as renderers } from '../../chunks/_@astro-renderers_B2oNcLm2.mjs';
 
 const redis = new VercelKV({
   url: undefined                               ,
@@ -95,25 +95,17 @@ const getSpotifyStatus = async () => {
   return spotifyStatus;
 };
 const GET = async ({ params, request }) => {
-  const spotifyCache = await redis.get("spotify-cache").catch((err) => {
-    console.error(err);
-  });
-  if (spotifyCache) {
-    return new Response(JSON.stringify(spotifyCache), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-  }
   const spotifyStatus = await getSpotifyStatus();
-  await redis.setex("spotify-cache", 30, spotifyStatus).catch((err) => {
+  await redis.set("last-spotify-song", spotifyStatus).catch((err) => {
     console.error(err);
   });
   return new Response(JSON.stringify(spotifyStatus), {
     status: 200,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
     }
   });
 };

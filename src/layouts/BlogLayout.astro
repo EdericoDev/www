@@ -1,39 +1,57 @@
 ---
-import Navigation from "../components/SiteLogo.astro";
+import Sidebar from '../components/Sidebar.astro';
+import PostsSidebar from '../components/PostsSidebar.astro';
+import MobileNavigation from '../components/MobileNavigation.astro';
 
 const { title, description } = Astro.props.frontmatter || Astro.props;
+const isBlogPost = Astro.url.pathname.startsWith('/myblog/');
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none">
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8" />
     <meta property="og:site_name" content="ederico.dev" />
-    <meta property="og:url" content="https://ederico.dev/" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, 'https://ederico.dev/')} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta name="description" content={description} />
+    <meta property="og:type" content={isBlogPost ? "article" : "website"} />
     <meta property="og:locale" content="en_US" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/x-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title + " - ederico.dev"}</title>
-  </head>
-  <body class="bg-white dark:bg-zinc-900 dark:text-white">
-    <div class="px-6 py-14">
-      <Navigation />
-      <main class="prose prose-zinc m-auto dark:prose-invert">
-        <slot />
-        {
-          Astro.url.pathname != "/" && (
-            <a href="/">
-              <button class="rounded-full border bg-zinc-50 px-2 font-bold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white">
-                {"< Homepage"}
-              </button>
-            </a>
-          )
-        }
-      </main>
+    <title>{title} - ederico.dev</title>
+</head>
+<body class="bg-white dark:bg-zinc-900 dark:text-white">
+    <Sidebar />
+    <PostsSidebar />
+    <MobileNavigation />
+
+    <div class={`px-6 py-14 transition-all duration-300 ${
+      isBlogPost ? 'md:ml-[32rem]' : 'md:ml-64'
+    }`}>
+        <div class="mx-auto max-w-6xl">
+            <main class="prose dark:prose-invert max-w-none mt-16 md:mt-0">
+                <slot />
+            </main>
+        </div>
     </div>
-  </body>
+
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeButton = document.querySelector('[data-dark-mode-button]');
+            const updateDarkMode = () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            };
+
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+
+            darkModeButton?.addEventListener('click', updateDarkMode);
+        });
+    </script>
+</body>
 </html>
