@@ -1,8 +1,53 @@
 ---
-layout: ../layouts/SidebarLayout.astro
+layout: ../layouts/Layout.astro
+title: Ederico's Website
+description: Developer, creator, and tech enthusiast
 ---
 
-<h1 class="text-3xl font-semibold">Benvenuto su Ederico.dev</h1>
-<p class="text-lg text-gray-700">
-</p>
+# Hello, I'm Ederico
 
+Welcome to my personal website. I'm a developer, creator, and tech enthusiast.
+
+## Recent Posts
+
+<div className="space-y-4 mt-6">
+  <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+    <h3 className="text-xl font-semibold">
+      <a href="/blog/first-post" className="hover:text-blue-600 dark:hover:text-blue-400">
+        Getting Started with Astro
+      </a>
+    </h3>
+    <p className="text-gray-600 dark:text-gray-400 text-sm">June 12, 2023</p>
+    <p className="mt-2">A quick introduction to building websites with Astro and why I chose it for my personal site.</p>
+  </div>
+  
+  <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+    <h3 className="text-xl font-semibold">
+      <a href="/blog/second-post" className="hover:text-blue-600 dark:hover:text-blue-400">
+        Tailwind CSS Tips and Tricks
+      </a>
+    </h3>
+    <p className="text-gray-600 dark:text-gray-400 text-sm">May 28, 2023</p>
+    <p className="mt-2">Some useful patterns and techniques I've discovered while working with Tailwind CSS.</p>
+  </div>
+</div>
+
+<div className="mt-4">
+  <a href="/blog" className="text-blue-600 dark:text-blue-400 hover:underline">View all posts →</a>
+</div>
+
+## Featured Projects
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+    <h3 className="text-xl font-semibold">Project One</h3>
+    <p className="mt-2">A brief description of this amazing project and what technologies were used.</p>
+    <a href="/projects/project-one" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">Learn more →</a>
+  </div>
+  
+  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+    <h3 className="text-xl font-semibold">Project Two</h3>
+    <p className="mt-2">Another cool project with its own unique challenges and solutions.</p>
+    <a href="/projects/project-two" className="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">Learn more →</a>
+  </div>
+</div>
