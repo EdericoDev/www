@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>ederico.dev</title>
+
+    <!-- Aggiungi font moderni -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Aggiungi Tailwind CSS (o un altro CSS) -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+      /* Aggiungi base per la tipografia */
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9f9f9; /* Colore di sfondo chiaro */
+        color: #333; /* Testo scuro per il contrasto */
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Gestione layout fluido e mobile-first */
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      /* Definiamo il layout base */
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        max-width: 800px;
+        text-align: center;
+      }
+
+      /* Aggiungi un semplice header */
+      header {
+        width: 100%;
+        padding: 20px 0;
+        background-color: #111;
+        color: white;
+        text-align: center;
+      }
+
+      nav {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #4CAF50; /* Colore verde chiaro per hover */
+      }
+
+      /* Stile per contenuti principali */
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Aggiungi margini e padding per responsività */
+      @media (max-width: 768px) {
+        main {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        p {
+          font-size: 0.9rem;
+        }
+
+        nav {
+          flex-direction: column;
+        }
+
+        nav a {
+          margin: 10px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Ederico.dev</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="content">
+        <h2>Your journey to learning starts here</h2>
+        <p>Discover various projects, tutorials, and more. This is a space where you can explore ideas, code, and creativity!</p>
+        <p>Feel free to browse around or check out the projects linked in the navigation above.</p>
+      </section>
+    </main>
+  </body>
+</html>
